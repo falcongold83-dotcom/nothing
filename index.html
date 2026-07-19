@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOTHING</title>
+
+<style>
+body{
+margin:0;
+background:#000;
+color:#fff;
+font-family:Arial,Helvetica,sans-serif;
+text-align:center;
+}
+
+.hero{
+height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+}
+
+h1{
+font-size:72px;
+letter-spacing:12px;
+margin:0;
+}
+
+p{
+color:#bdbdbd;
+font-size:20px;
+max-width:700px;
+margin:20px auto;
+line-height:1.8;
+padding:0 20px;
+}
+
+.section{
+padding:80px 20px;
+max-width:900px;
+margin:auto;
+}
+
+.wallet{
+background:#111;
+padding:20px;
+border-radius:12px;
+margin:20px 0;
+word-break:break-all;
+}
+
+button{
+background:#fff;
+color:#000;
+border:none;
+padding:12px 24px;
+border-radius:8px;
+cursor:pointer;
+margin-top:15px;
+font-weight:bold;
+}
+
+button:hover{
+opacity:.85;
+}
+
+footer{
+padding:80px 20px;
+color:#666;
+}
+</style>
+
+<script>
+function copy(text){
+navigator.clipboard.writeText(text);
+alert("Address copied.");
+}
+</script>
+
+</head>
+
+<body>
+
+<div class="hero">
+<h1>NOTHING</h1>
+
+<p>
+What if Nothing had value?
+</p>
+
+</div>
+
+<div class="section">
+
+<h2>About</h2>
+
+<p>
+
+This is an artistic and social experiment exploring value, trust and human choice.
+
+If you decide to contribute, you will receive nothing in return.
+
+Your contribution is completely voluntary.
+
+</p>
+
+<h2>Contribute</h2>
+
+<div class="wallet">
+<h3>Bitcoin</h3>
+
+bc1pxv8ex76gjf0z297r7a9k9a33ws2rvyp5wta7kfpsts992hmfrgks792d0d
+
+<br>
+
+<button onclick="copy('bc1pxv8ex76gjf0z297r7a9k9a33ws2rvyp5wta7kfpsts992hmfrgks792d0d')">
+Copy
+</button>
+
+</div>
+
+<div class="wallet">
+
+<h3>Ethereum / ERC20 / BNB</h3>
+
+0x7A49fB7cFb642D7dEc748292796225d52bD0B08E
+
+<br>
+
+<button onclick="copy('0x7A49fB7cFb642D7dEc748292796225d52bD0B08E')">
+Copy
+</button>
+
+</div>
+
+<div class="wallet">
+
+<h3>USDT (TRC20)</h3>
+
+TJGXDWPLpHATacnQ8BUFaWhfHCtDEgKtTE
+
+<br>
+
+<button onclick="copy('TJGXDWPLpHATacnQ8BUFaWhfHCtDEgKtTE')">
+Copy
+</button>
+
+</div>
+
+</div>
+
+<footer>
+
+Perhaps Nothing is worth Everything.
+
+</footer>
+
+</body>
+</html>
