@@ -337,4 +337,13 @@ footer p {
     text-transform:uppercase;
     margin:12px 0 18px;
 }
-  
+
+    .wallet-card{
+    transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease;
+}
+
+.wallet-card:hover{
+    transform: translateY(-10px);
+    border-color:#ffffff;
+    box-shadow:0 15px 40px rgba(255,255,255,.08);
+}
