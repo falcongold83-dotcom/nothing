@@ -1,1 +1,152 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>NOTHING</title><style>body{margin:0;background:#000;color:#fff;font-family:Arial,sans-serif}.hero{height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center}h1{font-size:90px;letter-spacing:12px}.section{max-width:900px;margin:auto;padding:40px 20px}.card{background:#111;border:1px solid #222;border-radius:14px;padding:18px;margin:18px 0}.addr{word-break:break-all}button{margin-top:10px;padding:10px 18px}.footer{text-align:center;color:#777;padding:40px}</style><script>function c(x){navigator.clipboard.writeText(x);alert('Address copied');}</script></head><body><div class='hero'><h1>NOTHING</h1><p>What if Nothing had value?</p></div><div class='section'><h2>About</h2><p>This is an artistic and social experiment. Participation is voluntary. You receive nothing in return.</p><div class='card'><h3>Bitcoin</h3><div class='addr'>bc1pxv8ex76gjf0z297r7a9k9a33ws2rvyp5wta7kfpsts992hmfrgks792d0d</div><button onclick="c('bc1pxv8ex76gjf0z297r7a9k9a33ws2rvyp5wta7kfpsts992hmfrgks792d0d')">Copy</button></div><div class='card'><h3>Ethereum / ERC20 / BNB</h3><div class='addr'>0x7A49fB7cFb642D7dEc748292796225d52bD0B08E</div><button onclick="c('0x7A49fB7cFb642D7dEc748292796225d52bD7dEc748292796225d52bD0B08E')">Copy</button></div><div class='card'><h3>USDT (TRC20)</h3><div class='addr'>TJGXDWPLpHATacnQ8BUFaWhfHCtDEgKtTE</div><button onclick="c('TJGXDWPLpHATacnQ8BUFaWhfHCtDEgKtTE')">Copy</button></div><h2>Recognition</h2><p>If you want your name or nickname to appear in the final artwork, contact us after contributing. This is optional.</p><p><strong>Verify the network before sending. Blockchain transactions cannot be reversed.</strong></p></div><div class='footer'>Perhaps Nothing is worth Everything.</div></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOTHING — A Social Experiment</title>
+    <meta name="description" content="An ongoing social experiment asking: How much would you voluntarily pay for absolutely nothing?">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="noise"></div>
+    <div class="cursor"></div>
+
+    <nav>
+        <div class="logo">NOTHING</div>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero reveal">
+            <h1 class="glitch" data-text="NOTHING">NOTHING</h1>
+            <p class="subtitle">An Ongoing Social Experiment</p>
+            
+            <div class="question-container">
+                <p class="question">
+    How much would you pay...<br>
+    knowing you will receive absolutely <strong>Nothing</strong>?
+</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="label">DAY</span>
+                    <span class="value" id="day-count">001</span>
+                </div>
+                <div class="stat-item">
+                    <span class="label">VALUE ASSIGNED TO NOTHING</span>
+                    <span class="value">$<span id="total-value">0.00</span></span>
+                </div>
+                <div class="stat-item">
+                    <span class="label">CONTRIBUTORS</span>
+                    <span class="value" id="contributor-count">0</span>
+                </div>
+            </div>
+            
+            <div class="scroll-indicator">
+                <span>SCROLL TO EXPLORE</span>
+                <div class="line"></div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section class="about reveal">
+          <p>
+Throughout history, humanity has assigned value to gold, paper, code, ideas, and belief.
+</p>
+
+<p>
+This experiment asks a different question:
+Can <strong>Nothing</strong> become valuable simply because people decide it is?
+</p>
+
+<p>
+If you choose to participate, you are not buying a product, a service, or a promise.
+You receive absolutely <strong>Nothing</strong>.
+The only thing created is meaning.
+</p>
+        </section>
+
+        <!-- Wallets Section -->
+        <section class="wallets reveal">
+            <div class="container">
+        <h2 class="section-title">ASSIGN VALUE</h2>
+
+<div class="network-warning">
+    Verify the blockchain network before sending.<br>
+    Blockchain transactions cannot be reversed.
+</div>
+                <div class="wallet-grid">
+                    <!-- BTC -->
+                    <div class="wallet-card">
+                        <div class="card-inner">
+                            <div class="coin-icon">₿</div>
+                            <h3>Bitcoin</h3>
+                            <div class="qr-placeholder" data-addr="bc1pxv8ex76gjf0z297r7a9k9a33ws2rvyp5wta7kfpsts992hmfrgks792d0d">
+                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=bc1pxv8ex76gjf0z297r7a9k9a33ws2rvyp5wta7kfpsts992hmfrgks792d0d&color=ffffff&bgcolor=000000" alt="BTC QR">
+                            </div>
+                            <p class="address">bc1pxv8ex7...792d0d</p>
+                            <button class="copy-btn" onclick="copyToClipboard('bc1pxv8ex76gjf0z297r7a9k9a33ws2rvyp5wta7kfpsts992hmfrgks792d0d', this)">COPY ADDRESS</button>
+                        </div>
+                    </div>
+
+                    <!-- ETH -->
+                    <div class="wallet-card">
+                        <div class="card-inner">
+                            <div class="coin-icon">Ξ</div>
+                            <h3>Ethereum / ERC20</h3>
+                            <div class="qr-placeholder" data-addr="0x7A49fB7cFb642D7dEc748292796225d52bD0B08E">
+                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=0x7A49fB7cFb642D7dEc748292796225d52bD0B08E&color=ffffff&bgcolor=000000" alt="ETH QR">
+                            </div>
+                            <p class="address">0x7A49fB...B08E</p>
+                            <button class="copy-btn" onclick="copyToClipboard('0x7A49fB7cFb642D7dEc748292796225d52bD0B08E', this)">COPY ADDRESS</button>
+                        </div>
+                    </div>
+
+                    <!-- USDT -->
+                    <div class="wallet-card">
+                        <div class="card-inner">
+                            <div class="coin-icon">₮</div>
+                            <h3>USDT (TRC20)</h3>
+                            <div class="qr-placeholder" data-addr="TJGXDWPLpHATacnQ8BUFaWhfHCtDEgKtTE">
+                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=TJGXDWPLpHATacnQ8BUFaWhfHCtDEgKtTE&color=ffffff&bgcolor=000000" alt="USDT QR">
+                            </div>
+                            <p class="address">TJGXDWPL...EgKtTE</p>
+                            <button class="copy-btn" onclick="copyToClipboard('TJGXDWPLpHATacnQ8BUFaWhfHCtDEgKtTE', this)">COPY ADDRESS</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contributors Section -->
+       <section class="contributors reveal">
+    <div class="container">
+        <h2 class="section-title">LATEST CONTRIBUTORS</h2>
+
+        <div class="contributor-list">
+
+            <div class="contributor-row">
+                <span>No contributors yet.</span>
+            </div>
+
+            <div class="contributor-row">
+                <span>Be the first person to assign value to Nothing.</span>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+    </main>
+
+    <footer class="reveal">
+        <p>Perhaps Nothing is worth Everything.</p>
+        <div class="footer-line"></div>
+        <p class="copyright">© 2024 NOTHING EXPERIMENT. NO RIGHTS RESERVED.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
