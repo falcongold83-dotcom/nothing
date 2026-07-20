@@ -318,7 +318,7 @@ footer p {
         font-size: 1.3rem;
     }
  
-}.network-warning{ 
+.network-warning{ 
     max-width:700px;
     margin:20px auto 50px;
     padding:18px;
@@ -329,5 +329,12 @@ footer p {
     font-size:0.9rem;
     line-height:1.8;
     border-radius:8px;
-  
+    }
+    .network-list{
+    color:#888;
+    font-size:.75rem;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    margin:12px 0 18px;
 }
+  
