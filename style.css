@@ -69,7 +69,7 @@ nav {
 
 /* Sections Global */
 section {
-    min-height: 100vh;
+   min-height: auto;
     display: flex;
     flex-direction: column;
     justify-content: center;
