@@ -130,7 +130,7 @@ section {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 80px;
-    margin-top: 100px;
+    margin-top: 80px;
     text-align: center;
 }
 
