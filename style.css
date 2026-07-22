@@ -392,3 +392,8 @@ footer p {
     letter-spacing: 0.12em;
     color: #ffffff;
 }
+}   
+.hero {
+    min-height: 100vh;
+    position: relative;
+}
