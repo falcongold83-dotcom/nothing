@@ -67,6 +67,11 @@ nav {
     font-size: 0.8rem;
 }
 
+.contributor-row span:last-child {
+    color: rgba(255,255,255,0.55);
+    font-style: italic;
+}
+
 /* Sections Global */
 section {
    min-height: auto;
