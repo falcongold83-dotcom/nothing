@@ -270,7 +270,7 @@ section {
 .contributor-row:hover {
     color:#ffffff;
     border-bottom-color:#444;
-    transform: translateX(6px);
+   transform: translateX(12px);
 }
 
 .c-val {
