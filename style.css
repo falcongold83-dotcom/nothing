@@ -367,3 +367,9 @@ footer p {
     line-height: 1.8;
     letter-spacing: 0.05em;
 }
+
+    .contributor-row span:first-child {
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: #ffffff;
+}
