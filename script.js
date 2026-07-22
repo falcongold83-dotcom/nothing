@@ -35,11 +35,11 @@ function animateValue(obj, start, end, duration) {
         const progress = Math.min((timestamp - startTimestamp) / duration, 1);
         const current = (progress * (end - start) + start);
         
-        if (obj.id === 'total-value') {
-            obj.innerHTML = current.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-        } else {
-            obj.innerHTML = Math.floor(current).toString().padStart(3, '0');
-        }
+      if (obj.id === 'asset-count') {
+    obj.innerHTML = Math.floor(current);
+} else {
+    obj.innerHTML = Math.floor(current).toString().padStart(3, '0');
+}
         
         if (progress < 1) {
             window.requestAnimationFrame(step);
@@ -50,7 +50,7 @@ function animateValue(obj, start, end, duration) {
 
 window.addEventListener('load', () => {
     animateValue(document.getElementById('day-count'), 0, 1, 1500);
-    animateValue(document.getElementById('total-value'), 0, 0, 1500);
+    animateValue(document.getElementById('asset-count'), 0, 0, 1500);
     animateValue(document.getElementById('contributor-count'), 0, 0, 1500);
 });
 
