@@ -256,11 +256,19 @@ section {
 .contributor-row {
     display: flex;
     justify-content: space-between;
-    padding: 20px 0;
-    border-bottom: 1px solid #111;
-    font-family: monospace;
-    font-size: 0.9rem;
-    color: #888;
+    align-items: center;
+    padding: 28px 0;
+    border-bottom: 1px solid #1a1a1a;
+    font-family: "Courier New", monospace;
+    font-size: 1rem;
+    color: #999;
+    transition: all .35s ease;
+}
+
+.contributor-row:hover {
+    color:#ffffff;
+    border-bottom-color:#444;
+    transform: translateX(6px);
 }
 
 .c-val {
