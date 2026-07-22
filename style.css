@@ -150,7 +150,7 @@ section {
 
 .scroll-indicator {
     position: absolute;
-    bottom: 40px;
+    bottom: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
