@@ -71,7 +71,13 @@ nav {
     color: rgba(255,255,255,0.55);
     font-style: italic;
 }
-
+.contributor-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 22px;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+}
 /* Sections Global */
 section {
    min-height: auto;
