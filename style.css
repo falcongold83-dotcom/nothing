@@ -398,3 +398,7 @@ footer p {
     position: relative;
     padding-bottom: 100px;
 }
+
+.stat-item {
+    position: relative;
+}
