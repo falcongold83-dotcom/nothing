@@ -404,3 +404,24 @@ footer p {
 }
 
 }
+
+.claim-action{
+    text-align:center;
+    margin:50px 0;
+}
+
+.claim-btn{
+    background:transparent;
+    color:#fff;
+    border:1px solid #fff;
+    padding:18px 48px;
+    font-size:.8rem;
+    letter-spacing:.25em;
+    text-transform:uppercase;
+    transition:.3s;
+}
+
+.claim-btn:hover{
+    background:#fff;
+    color:#000;
+}
