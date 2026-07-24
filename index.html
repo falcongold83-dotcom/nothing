@@ -3,214 +3,267 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NOTHING — A Social Experiment</title>
-    <meta name="description" content="An ongoing social experiment asking: How much would you voluntarily pay for absolutely nothing?">
+    <title>NOTHING | An Ongoing Social Experiment</title>
+    <meta name="description" content="How much would you pay knowing you will receive absolutely Nothing?">
+    <!-- Typography: Inter for that premium tech feel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <!-- Lucide Icons for clean UI -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
 
-    <div class="noise"></div>
-    <div class="cursor"></div>
-
-    
-      
- 
-
-    <main>
-        <!-- Hero Section -->
-        <section class="hero reveal">
-            <h1 class="glitch" data-text="NOTHING">NOTHING</h1>
-            <p class="subtitle">An Ongoing Social Experiment</p>
-            
-            <div class="question-container">
-                <p class="question">
-    How much would you pay...<br>
-    knowing you will receive absolutely <strong>Nothing</strong>?
-</p>
-            </div>
-
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <span class="label">DAY</span>
-                    <span class="value" id="day-count">001</span>
-                </div>
-               <div class="stat-item">
-    <span class="label">DIFFERENT ASSETS</span>
-    <span class="value" id="asset-count">0</span>
-</div>
-                <div class="stat-item">
-                    <span class="label">CONTRIBUTORS</span>
-                    <span class="value" id="contributor-count">0</span>
-                </div>
-            </div>
-            
-            <div class="scroll-indicator">
-                <span>SCROLL TO EXPLORE</span>
-                <div class="line"></div>
-            </div>
-        </section>
-
-        <!-- About Section -->
-        <section class="about reveal">
-          <p>
-Throughout history, humanity has assigned value to gold, paper, code, ideas, and belief.
-</p>
-
-<p>
-This experiment asks a different question:
-Can <strong>Nothing</strong> become valuable simply because people decide it is?
-</p>
-
-<p>
-If you choose to participate, you are not buying a product, a service, or a promise.
-You receive absolutely <strong>Nothing</strong>.
-The only thing created is meaning.
-</p>
-        </section>
-
-        <!-- Wallets Section -->
-        <section class="wallets reveal">
-            <div class="container">
-       <h2 class="section-title">ASSIGN VALUE TO NOTHING</h2>
-<div class="content-wrapper">
-    
-      <p>
-    Assign whatever value you believe Nothing deserves.
-    There is no minimum.
-    There is no maximum.
-    Every contribution becomes part of the experiment.
-</p>
-    
-
-    <p>
-    
-    You are not purchasing a product or a service.
-    You receive absolutely Nothing in return.
-    Your contribution becomes part of this ongoing experiment.
-
-    </p>
-</div>
- 
-<div class="network-warning">
-    .<br>
- Use only the network shown on each wallet.<br>
-The address displayed is shortened for readability. COPY always copies the full address.
-</div>
-                <div class="wallet-grid">
-                    <!-- BTC -->
-                    <div class="wallet-card">
-                        <div class="card-inner">
-                            <div class="coin-icon">₿</div>
-                            <h3>Bitcoin</h3>
-                            <p class="network-list">
-                                BTC
-</p>
-                            <div class="qr-placeholder" data-addr="bc1pxv8ex76gjf0z297r7a9k9a33ws2rvyp5wta7kfpsts992hmfrgks792d0d">
-                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=bc1pxv8ex76gjf0z297r7a9k9a33ws2rvyp5wta7kfpsts992hmfrgks792d0d&color=ffffff&bgcolor=000000" alt="BTC QR">
-                            </div>
-                            <p class="address">bc1pxv8ex7...792d0d</p>
-                            <button class="copy-btn" onclick="copyToClipboard('bc1pxv8ex76gjf0z297r7a9k9a33ws2rvyp5wta7kfpsts992hmfrgks792d0d', this)">COPY</button>
-                        </div>
-                    </div>
-
-                    <!-- ETH -->
-                    <div class="wallet-card">
-                        <div class="card-inner">
-                            <div class="coin-icon">Ξ</div>
-                           <h3>Ethereum</h3>
-                            <p class="network-list">
-                                ERC20 
-</p>
-                            <div class="qr-placeholder" data-addr="0x7A49fB7cFb642D7dEc748292796225d52bD0B08E">
-                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=0x7A49fB7cFb642D7dEc748292796225d52bD0B08E&color=ffffff&bgcolor=000000" alt="ETH QR">
-                            </div>
-                            <p class="address">0x7A49fB...B08E</p>
-                            <button class="copy-btn" onclick="copyToClipboard('0x7A49fB7cFb642D7dEc748292796225d52bD0B08E', this)">COPY</button>
-                        </div>
-                    </div>
-                         <div class="wallet-card">
-                        <div class="card-inner">
-                            <div class="coin-icon">Ξ</div>
-                           <h3>BNB Smart Chain</h3>
-                            <p class="network-list">
-                                BEP20
-</p>
-                            <div class="qr-placeholder" data-addr="0x7A49fB7cFb642D7dEc748292796225d52bD0B08E">
-                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=0x7A49fB7cFb642D7dEc748292796225d52bD0B08E&color=ffffff&bgcolor=000000" alt="ETH QR">
-                            </div>
-                            <p class="address">0x7A49fB...B08E</p>
-                            <button class="copy-btn" onclick="copyToClipboard('0x7A49fB7cFb642D7dEc748292796225d52bD0B08E', this)">COPY</button>
-                        </div>
-                    </div>
-
-                    <!-- USDT -->
-                    <div class="wallet-card">
-                        <div class="card-inner">
-                            <div class="coin-icon">₮</div>
-                           <h3>USDT</h3>
-                            <p class="network-list">
-                                TRC20 
-</p>
-                            <div class="qr-placeholder" data-addr="TJGXDWPLpHATacnQ8BUFaWhfHCtDEgKtTE">
-                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=TJGXDWPLpHATacnQ8BUFaWhfHCtDEgKtTE&color=ffffff&bgcolor=000000" alt="USDT QR">
-                            </div>
-                            <p class="address">TJGXDWPL...EgKtTE</p>
-                            <button class="copy-btn" onclick="copyToClipboard('TJGXDWPLpHATacnQ8BUFaWhfHCtDEgKtTE', this)">COPY</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <div class="claim-action">
-        <button class="claim-btn">I'VE PAID</button>
-</div>
-        
-        <!-- Contributors Section -->
-       <section class="contributors reveal">
-    <div class="container">
-      <h2 class="section-title">THE FIRST 100</h2>
-        
-<p class="contributors-subtitle">
-    The first 100 people who assign value to Nothing<br>
-    become part of the experiment forever.
-</p>
-        
-        <div class="contributor-list">
-  <div class="contributor-row">
-    <span>#0001</span>
-    <span>Your Name Here</span>
-</div>
-
-<div class="contributor-row">
-    <span>#0002</span>
-    <span>Waiting...</span>
-</div>
-
-<div class="contributor-row">
-    <span>#0003</span>
-    <span>Waiting...</span>
-</div>
-
-<div class="contributor-row">
-    <span>#0004</span>
-    <span>Waiting...</span>
-</div>
-
-<div class="contributor-row">
-    <span>#0005</span>
-    <span>Waiting...</span>
-</div>
-</div>
-
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
     </div>
-</section>
-    </main>
 
-    <footer class="reveal">
-        <p>Perhaps Nothing is worth Everything.</p>
-        <div class="footer-line"></div>
-        <p class="copyright">© 2024 NOTHING EXPERIMENT. NO RIGHTS RESERVED.</p>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-logo">NOTHING</div>
+        <div class="nav-links">
+            <a href="#about">Experiment</a>
+            <a href="#wallets">Contribute</a>
+            <button class="btn-primary-sm" onclick="openModal()">I've Paid</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content reveal">
+            <h1 class="glitch-text">NOTHING</h1>
+            <p class="subtitle">An Ongoing Social Experiment</p>
+            <div class="hero-question">
+                <p>How much would you pay knowing you will receive absolutely Nothing?</p>
+            </div>
+            <div class="scroll-indicator">
+                <div class="mouse"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Stats -->
+    <section class="stats-section" id="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item reveal">
+                    <span class="stat-label">Day Counter</span>
+                    <h2 class="stat-value" data-target="142">0</h2>
+                </div>
+                <div class="stat-item reveal">
+                    <span class="stat-label">Total Assets (USD)</span>
+                    <h2 class="stat-value" data-target="84200">$0</h2>
+                </div>
+                <div class="stat-item reveal">
+                    <span class="stat-label">Contributors</span>
+                    <h2 class="stat-value" data-target="1042">0</h2>
+                </div>
+                <div class="stat-item reveal">
+                    <span class="stat-label">Expected Return</span>
+                    <h2 class="stat-value">0.00%</h2>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section" id="about">
+        <div class="container narrow reveal">
+            <h2 class="section-title">The Philosophy</h2>
+            <p class="about-text">
+                In a world obsessed with utility, ROI, and constant acquisition, <strong>NOTHING</strong> challenges the fundamental nature of transaction. 
+            </p>
+            <p class="about-text">
+                This is not a charity. This is not an investment. This is not a product. It is a mirror held up to the digital age. By contributing, you are making a conscious decision to detach value from expectation. 
+            </p>
+            <p class="about-text">
+                You will receive no token, no whitelist, no access, and no gratitude. You will receive exactly what we promised.
+            </p>
+        </div>
+    </section>
+
+    <!-- Wallet Section -->
+    <section class="wallet-section" id="wallets">
+        <div class="container">
+            <h2 class="section-title reveal">Select Your Asset</h2>
+            <div class="wallet-grid">
+                <!-- Bitcoin -->
+                <div class="wallet-card reveal">
+                    <div class="wallet-header">
+                        <i data-lucide="bitcoin" class="wallet-icon"></i>
+                        <span class="network-tag">Bitcoin Network</span>
+                    </div>
+                    <div class="qr-box">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh" alt="BTC QR">
+                    </div>
+                    <div class="address-container">
+                        <code class="wallet-address" id="btc-addr">bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh</code>
+                        <button class="copy-btn" onclick="copyAddress('btc-addr')">
+                            <i data-lucide="copy"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Ethereum -->
+                <div class="wallet-card reveal">
+                    <div class="wallet-header">
+                        <i data-lucide="coins" class="wallet-icon"></i>
+                        <span class="network-tag">ERC-20</span>
+                    </div>
+                    <div class="qr-box">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=0x71C7656EC7ab88b098defB751B7401B5f6d8976F" alt="ETH QR">
+                    </div>
+                    <div class="address-container">
+                        <code class="wallet-address" id="eth-addr">0x71C7656EC7ab88b098defB751B7401B5f6d8976F</code>
+                        <button class="copy-btn" onclick="copyAddress('eth-addr')">
+                            <i data-lucide="copy"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- BNB -->
+                <div class="wallet-card reveal">
+                    <div class="wallet-header">
+                        <i data-lucide="component" class="wallet-icon"></i>
+                        <span class="network-tag">BEP-20 (BSC)</span>
+                    </div>
+                    <div class="qr-box">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=0x71C7656EC7ab88b098defB751B7401B5f6d8976F" alt="BNB QR">
+                    </div>
+                    <div class="address-container">
+                        <code class="wallet-address" id="bnb-addr">0x71C7656EC7ab88b098defB751B7401B5f6d8976F</code>
+                        <button class="copy-btn" onclick="copyAddress('bnb-addr')">
+                            <i data-lucide="copy"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- USDT TRC20 -->
+                <div class="wallet-card reveal">
+                    <div class="wallet-header">
+                        <i data-lucide="dollar-sign" class="wallet-icon"></i>
+                        <span class="network-tag">USDT (TRC20)</span>
+                    </div>
+                    <div class="qr-box">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=TR7NHqjeKQxGChmq8VKqxq667nd4u3ebir" alt="TRC20 QR">
+                    </div>
+                    <div class="address-container">
+                        <code class="wallet-address" id="trc-addr">TR7NHqjeKQxGChmq8VKqxq667nd4u3ebir</code>
+                        <button class="copy-btn" onclick="copyAddress('trc-addr')">
+                            <i data-lucide="copy"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- USDT BEP20 -->
+                <div class="wallet-card reveal">
+                    <div class="wallet-header">
+                        <i data-lucide="shield-check" class="wallet-icon"></i>
+                        <span class="network-tag">USDT (BEP20)</span>
+                    </div>
+                    <div class="qr-box">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=0x55d398326f99059ff775485246999027b3197955" alt="BEP20 QR">
+                    </div>
+                    <div class="address-container">
+                        <code class="wallet-address" id="bep-addr">0x55d398326f99059ff775485246999027b3197955</code>
+                        <button class="copy-btn" onclick="copyAddress('bep-addr')">
+                            <i data-lucide="copy"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- USDT ERC20 -->
+                <div class="wallet-card reveal">
+                    <div class="wallet-header">
+                        <i data-lucide="layers" class="wallet-icon"></i>
+                        <span class="network-tag">USDT (ERC20)</span>
+                    </div>
+                    <div class="qr-box">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=0xdAC17F958D2ee523a2206206994597C13D831ec7" alt="ERC20 QR">
+                    </div>
+                    <div class="address-container">
+                        <code class="wallet-address" id="erc-addr">0xdAC17F958D2ee523a2206206994597C13D831ec7</code>
+                        <button class="copy-btn" onclick="copyAddress('erc-addr')">
+                            <i data-lucide="copy"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="action-footer reveal">
+                <button class="btn-glow" onclick="openModal()">I've Paid</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contributors Section -->
+    <section class="contributors-section">
+        <div class="container">
+            <h2 class="section-title reveal">The First 100</h2>
+            <div class="contributor-list" id="contributorList">
+                <!-- Generated by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-logo">NOTHING</div>
+            <p>&copy; 2024-2026. No Rights Reserved.</p>
+            <div class="social-links">
+                <a href="#">Twitter</a>
+                <a href="#">Etherscan</a>
+                <a href="#">Github</a>
+            </div>
+        </div>
     </footer>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-card">
+            <button class="close-modal" onclick="closeModal()">
+                <i data-lucide="x"></i>
+            </button>
+            <h3>Verify Contribution</h3>
+            <p>Your details will be recorded on the public wall.</p>
+            <form id="paymentForm">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" placeholder="Your Name or Alias" required id="formName">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Country</label>
+                        <input type="text" placeholder="Global" id="formCountry">
+                    </div>
+                    <div class="form-group">
+                        <label>Crypto</label>
+                        <select id="formCrypto">
+                            <option>BTC</option>
+                            <option>ETH</option>
+                            <option>BNB</option>
+                            <option>USDT</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Transaction Hash</label>
+                    <input type="text" placeholder="0x..." required id="formHash">
+                </div>
+                <div class="form-group">
+                    <label>Amount (USD Value)</label>
+                    <input type="number" step="0.01" placeholder="0.00" required id="formAmount">
+                </div>
+                <button type="submit" class="btn-submit">Submit Record</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast">Address copied to clipboard</div>
 
     <script src="script.js"></script>
 </body>
