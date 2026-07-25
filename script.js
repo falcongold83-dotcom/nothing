@@ -183,6 +183,7 @@ revealOnScroll();
 /* ===== Custom Cursor ===== */
 
 const cursor = document.querySelector(".cursor-dot");
+console.log(cursor);
 
 let mouseX = 0;
 let mouseY = 0;
