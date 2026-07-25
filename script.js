@@ -193,8 +193,8 @@ document.addEventListener("mousemove", (e) => {
 });
 
 function animateCursor() {
-    cursorX += (mouseX - cursorX) * 0.40;
-    cursorY += (mouseY - cursorY) * 0.40;
+cursorX = mouseX;
+cursorY = mouseY;
 
     cursor.style.left = cursorX + "px";
     cursor.style.top = cursorY + "px";
