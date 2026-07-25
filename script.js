@@ -204,6 +204,21 @@ function animateCursor() {
 
 animateCursor();
 
+document.querySelectorAll("a, button, .wallet-card").forEach((el) => {
+
+    el.addEventListener("mouseenter", () => {
+        cursor.style.width = "36px";
+        cursor.style.height = "36px";
+        cursor.style.background = "rgba(255,255,255,.08)";
+    });
+
+    el.addEventListener("mouseleave", () => {
+        cursor.style.width = "18px";
+        cursor.style.height = "18px";
+        cursor.style.background = "rgba(255,255,255,.15)";
+    });
+
+});
 
 
 
