@@ -568,3 +568,26 @@ footer {
 }
 
 }
+
+#cursor{
+    position:fixed;
+    width:18px;
+    height:18px;
+    border:1.5px solid rgba(255,255,255,.9);
+    background:rgba(255,255,255,.15);
+    border-radius:50%;
+    pointer-events:none;
+    left:0;
+    top:0;
+    transform:translate(-50%,-50%);
+    z-index:99999;
+    transition:
+        width .2s ease,
+        height .2s ease,
+        background .2s ease,
+        border-color .2s ease;
+}
+
+body{
+    cursor:none;
+}
