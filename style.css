@@ -574,7 +574,7 @@ footer {
     width:18px;
     height:18px;
     border:1.5px solid rgba(255,255,255,.9);
-    background:rgba(255,255,255,.15);
+    background: red;
     border-radius:50%;
     pointer-events:none;
     left:0;
