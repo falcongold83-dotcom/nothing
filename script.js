@@ -182,33 +182,6 @@ revealOnScroll();
 
 
 
-document.addEventListener("mousemove", (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-});
 
-function animateCursor() {
-    cursorX += (mouseX - cursorX) * 0.18;
-    cursorY += (mouseY - cursorY) * 0.18;
 
-    cursor.style.left = cursorX + "px";
-    cursor.style.top = cursorY + "px";
 
-    requestAnimationFrame(animateCursor);
-}
-
-animateCursor();
-
-document.querySelectorAll("a, button, .wallet-card").forEach(el => {
-    el.addEventListener("mouseenter", () => {
-        cursor.style.width = "36px";
-        cursor.style.height = "36px";
-        cursor.style.background = "rgba(255,255,255,.08)";
-    });
-
-    el.addEventListener("mouseleave", () => {
-        cursor.style.width = "18px";
-        cursor.style.height = "18px";
-        cursor.style.background = "transparent";
-    });
-});
