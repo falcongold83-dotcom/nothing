@@ -180,15 +180,7 @@ initContributors();
 // Initial check for elements in view
 revealOnScroll();
 
-/* ===== Custom Cursor ===== */
 
-const cursor = document.querySelector(".cursor-dot");
-console.log(cursor);
-
-let mouseX = 0;
-let mouseY = 0;
-let cursorX = 0;
-let cursorY = 0;
 
 document.addEventListener("mousemove", (e) => {
     mouseX = e.clientX;
