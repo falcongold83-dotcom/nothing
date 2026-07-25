@@ -566,3 +566,26 @@ footer {
     .form-row { grid-template-columns: 1fr; }
     .footer-content { flex-direction: column; gap: 2rem; text-align: center; }
 }
+/* ===== Custom Cursor ===== */
+
+body {
+    cursor: none;
+}
+
+.cursor-dot {
+    position: fixed;
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid rgba(255,255,255,.9);
+    border-radius: 50%;
+    pointer-events: none;
+    left: 0;
+    top: 0;
+    transform: translate(-50%, -50%);
+    z-index: 99999;
+    transition:
+        width .25s ease,
+        height .25s ease,
+        border-color .25s ease,
+        background .25s ease;
+}
