@@ -206,7 +206,7 @@ section {
     padding: 1.5rem 0;
       border: 1px solid var(--border-color);
     background: var(--card-bg);
-    border-radius: 6px;
+    border-radius: 12px;
     transition: var(--transition);
 }
 .stat-item:hover{
