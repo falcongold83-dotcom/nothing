@@ -208,6 +208,11 @@ section {
     background: var(--card-bg);
     border-radius: 6px;
 }
+.stat-item:hover{
+    border-color:#555;
+    transform:translateY(-4px);
+    transition:var(--transition);
+}
 
 .stat-value {
    font-size: 3rem;
