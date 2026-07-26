@@ -204,6 +204,9 @@ section {
 }
 .stat-item{
     padding: 1.5rem 0;
+      border: 1px solid var(--border-color);
+    background: var(--card-bg);
+    border-radius: 6px;
 }
 
 .stat-value {
