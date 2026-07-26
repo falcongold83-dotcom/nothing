@@ -149,6 +149,7 @@ document.getElementById("paymentForm").addEventListener("submit", function(e) {
 revealOnScroll();
 
 const cursor = document.getElementById("cursor");
+console.log("Cursor found:", cursor);
 
 let mouseX = 0;
 let mouseY = 0;
