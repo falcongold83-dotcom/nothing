@@ -211,6 +211,7 @@ section {
 .stat-item:hover{
     border-color:#555;
     transform:translateY(-4px);
+    box-shadow: 0 10px 30px rgba(255,255,255,0.08);
     transition:var(--transition);
 }
 
