@@ -197,7 +197,7 @@ section {
 .stat-label {
     display: block;
     color: var(--text-secondary);
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     text-transform: uppercase;
     letter-spacing: 2px;
     margin-bottom: 0.5rem;
