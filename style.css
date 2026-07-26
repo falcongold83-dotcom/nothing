@@ -202,6 +202,9 @@ section {
     letter-spacing: 2px;
     margin-bottom: 0.5rem;
 }
+.stat-item{
+    padding: 1.5rem 0;
+}
 
 .stat-value {
    font-size: 3rem;
