@@ -139,43 +139,11 @@ document.getElementById("paymentForm").addEventListener("submit", function(e) {
 /**
  * GENERATE CONTRIBUTORS LIST
  */
-const contributorList = document.getElementById("contributorList");
-const contributors = [
-    { id: "0001", name: "Satoshi's Ghost", amount: "0.5 BTC" },
-    { id: "0002", name: "Void Walker", amount: "10 ETH" },
-    { id: "0003", name: "Nihilist_99", amount: "5,000 USDT" }
-];
 
-function initContributors() {
-    let html = "";
-    
-    // Add real simulated contributors
-    contributors.forEach(c => {
-        html += `
-            <div class="contributor-card reveal">
-                <span class="contributor-id">#${c.id}</span>
-                <span class="contributor-name">${c.name}</span>
-                <span class="contributor-val">${c.amount}</span>
-            </div>
-        `;
-    });
-
-    // Fill the rest of the 100 with "Waiting"
-    for (let i = 4; i <= 100; i++) {
-        const id = i.toString().padStart(4, '0');
-        html += `
-            <div class="contributor-card reveal">
-                <span class="contributor-id">#${id}</span>
-                <span class="contributor-status">Waiting for Nothing...</span>
-            </div>
-        `;
-    }
-    
-    contributorList.innerHTML = html;
-}
-
+   
+ 
 // Initialize the list
-initContributors();
+
 
 // Initial check for elements in view
 revealOnScroll();
