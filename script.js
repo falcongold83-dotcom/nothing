@@ -219,6 +219,26 @@ document.querySelectorAll("a, button, .wallet-card").forEach((el) => {
     });
 
 });
+// ===== Automatic Day Counter =====
+const projectStart = new Date("2026-07-26");
+
+function updateDayCounter() {
+    const today = new Date();
+
+    // حذف ساعت برای جلوگیری از اختلاف زمانی
+    projectStart.setHours(0, 0, 0, 0);
+    today.setHours(0, 0, 0, 0);
+
+    const diffTime = today - projectStart;
+    const day = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+    const counter = document.getElementById("dayCounter");
+    if (counter) {
+        counter.textContent = String(day).padStart(3, "0");
+    }
+}
+
+updateDayCounter();
 
 
 
