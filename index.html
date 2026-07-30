@@ -357,8 +357,52 @@ for (let i = 1; i <= 100; i++) {
 
   
 }
+        <!-- FIRST 100 MODAL -->
 
-</script>
+<div id="first100Modal" class="first100-modal">
+
+    <div class="first100-modal-box">
+
+        <button class="close-first100" onclick="closeFirst100Modal()">
+            ×
+        </button>
+
+        <h2>THE FIRST 100</h2>
+
+        <p>
+            Position 
+            <strong id="selectedPosition">#001</strong>
+        </p>
+
+
+        <h3>How would you like to appear?</h3>
+
+
+        <label>
+            <input type="radio" name="identity" value="anonymous" checked>
+            Anonymous
+        </label>
+
+
+        <label>
+            <input type="radio" name="identity" value="display">
+            Display name
+        </label>
+
+
+        <input 
+        id="displayNameInput"
+        type="text"
+        placeholder="Your display name">
+
+
+        <button class="continue-first100">
+            Continue
+        </button>
+
+
+</div>
+
   <script src="script.js"></script>
   </body>
     </html>
