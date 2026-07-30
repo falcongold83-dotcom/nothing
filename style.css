@@ -692,3 +692,21 @@ body{
 .member.claimed small {
     color:#D4AF37;
 }
+.member.claimed {
+    border-color: rgba(212,175,55,0.35);
+}
+
+
+.member.claimed span {
+    color: #D4AF37;
+}
+
+
+.member.claimed strong {
+    color: #D4AF37;
+}
+
+
+.member.claimed small {
+    color: #D4AF37;
+}
