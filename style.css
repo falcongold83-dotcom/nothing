@@ -713,41 +713,29 @@ body{
 
 #first100-list {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 12px;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 6px;
 }
 
 
 #first100-list .member {
-    padding: 14px 10px;
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 8px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 65px;
-    text-align: center;
+    padding: 8px 4px;
+    min-height: 42px;
+    border-radius: 6px;
 }
 
 
 #first100-list .member span {
-    font-size: 14px;
+    font-size: 12px;
 }
 
 
 #first100-list .member strong {
-    font-size: 12px;
-    margin-top: 6px;
+    font-size: 9px;
+    margin-top: 3px;
 }
 
 
-#first100-list .claimed {
-    border-color: rgba(212,175,55,0.5);
-}
-
-
-#first100-list .claimed strong,
 #first100-list .claimed small {
-    color: #D4AF37;
+    font-size: 9px;
 }
