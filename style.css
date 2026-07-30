@@ -785,5 +785,11 @@ body{
 
 #first100-list .claimed {
     border-color: #D4AF37;
+}
+
+#first100-list .claimed span,
+#first100-list .claimed strong,
+#first100-list .claimed small {
     color: #D4AF37;
+
 }
