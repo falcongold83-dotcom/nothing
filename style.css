@@ -674,3 +674,21 @@ body{
     font-size: 14px;
 
 }
+.member.available strong {
+    color:#666;
+}
+
+
+.member.claimed {
+    border-color: rgba(212,175,55,0.25);
+}
+
+
+.member.claimed strong {
+    color:#D4AF37;
+}
+
+
+.member.claimed small {
+    color:#D4AF37;
+}
