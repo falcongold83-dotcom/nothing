@@ -766,7 +766,9 @@ body{
 
 
 #first100-list .member span {
-    font-size: 14px;
+    font-size: 13px;
+    margin-bottom: 4px;
+
 }
 
 
