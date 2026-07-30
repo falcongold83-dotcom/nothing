@@ -606,3 +606,71 @@ footer {
 body{
     cursor:none;
 }
+/* THE FIRST 100 */
+
+.first100-section {
+    padding: 100px 0;
+    text-align: center;
+}
+
+
+.first100-text {
+    color: #888;
+    max-width: 600px;
+    margin: 0 auto 40px;
+    font-size: 16px;
+}
+
+
+.first100-card {
+
+    max-width: 500px;
+    margin: 0 auto;
+
+    border: 1px solid rgba(255,255,255,0.15);
+
+    background: rgba(255,255,255,0.02);
+
+    padding: 30px;
+
+    border-radius: 12px;
+
+    backdrop-filter: blur(10px);
+
+}
+
+
+.member {
+
+    display: flex;
+    justify-content: space-between;
+
+    padding: 16px 0;
+
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+
+    color: white;
+
+    font-size: 15px;
+
+}
+
+
+.member strong {
+
+    color: #777;
+
+    font-weight: 400;
+
+}
+
+
+.remaining {
+
+    margin-top: 25px;
+
+    color: #888;
+
+    font-size: 14px;
+
+}
