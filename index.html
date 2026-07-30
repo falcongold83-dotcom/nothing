@@ -314,7 +314,49 @@ The first 100 people who chose to assign value to Nothing.
     <div id="toast" class="toast">Address copied to clipboard</div>
 
  270  <div id="cursor"></div>
-271  <script src="script.js"></script>
-272  </body>
-</html>
+    <script>
+
+const first100List = document.getElementById("first100-list");
+
+const claimedMembers = {
+    4: {
+        name: "Anonymous",
+        crypto: "0.005 BTC"
+    }
+};
+
+for (let i = 1; i <= 100; i++) {
+
+    let number = String(i).padStart(3, "0");
+
+    if (claimedMembers[i]) {
+
+        first100List.innerHTML += `
+        <div class="member claimed">
+            <span>#${number}</span>
+            <div>
+                <strong>${claimedMembers[i].name}</strong>
+                <br>
+                <small>${claimedMembers[i].crypto}</small>
+            </div>
+        </div>
+        `;
+
+    } else {
+
+        first100List.innerHTML += `
+        <div class="member available">
+            <span>#${number}</span>
+            <strong>AVAILABLE</strong>
+        </div>
+        `;
+
+    }
+
+}
+
+</script>
+  <script src="script.js"></script>
+  </body>
+    </html>
 
