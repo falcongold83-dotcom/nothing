@@ -344,14 +344,18 @@ for (let i = 1; i <= 100; i++) {
 
     } else {
 
-        first100List.innerHTML += `
-        <div class="member available">
+      first100List.innerHTML += `
+        <div class="member available" onclick="openFirst100Modal(${number})">
             <span>#${number}</span>
-            <strong>AVAILABLE</strong>
         </div>
         `;
 
     }
+
+}
+        function openFirst100Modal(number) {
+
+    alert("You selected position #" + String(number).padStart(3, "0"));
 
 }
 
