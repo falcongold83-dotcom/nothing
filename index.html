@@ -381,6 +381,9 @@ document.getElementById("claimedCount").textContent = Object.keys(claimedMembers
             document.querySelector(".continue-first100").addEventListener("click", function() {
                 closeFirst100Modal();
                 document.getElementById("wallets").scrollIntoView({ behavior: "smooth" });
+                const walletGrid = document.querySelector(".wallet-grid");
+                walletGrid.classList.add("wallet-highlight");
+                setTimeout(() => walletGrid.classList.remove("wallet-highlight"), 3000);
             });
         });
         </script>
