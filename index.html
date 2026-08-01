@@ -18,6 +18,14 @@
     <link rel="stylesheet" href="style.css">
     <!-- Lucide Icons for clean UI -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Font Awesome for official brand icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .social-links { display: flex; align-items: center; gap: 20px; }
+        .social-links a { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; }
+        .social-links i { font-size: 20px; transition: transform 0.2s ease, opacity 0.2s ease; }
+        .social-links a:hover i { transform: translateY(-2px); opacity: 0.85; }
+    </style>
     <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-LV5WJ728KN"></script>
 <script>
@@ -262,10 +270,10 @@ The first 100 people who chose to assign value to Nothing.
             <div class="footer-logo">NOTHING</div>
             <p>&copy; 2026 NOTHING. An Ongoing Social Experiment.</p>
             <div class="social-links">
-                <a href="#">Twitter</a>
-                <a href="#">Etherscan</a>
-                <a href="#">Github</a>
-                <a href="https://instagram.com/nothinglab1" target="_blank">Instagram</a>
+                <a href="#" aria-label="Twitter" title="Twitter"><i class="fa-brands fa-x-twitter" style="color:#ffffff;"></i></a>
+                <a href="#" aria-label="Etherscan" title="Etherscan"><i class="fa-solid fa-chart-line" style="color:#21325B;"></i></a>
+                <a href="#" aria-label="Github" title="Github"><i class="fa-brands fa-github" style="color:#ffffff;"></i></a>
+                <a href="https://instagram.com/nothinglab1" target="_blank" aria-label="Instagram" title="Instagram"><i class="fa-brands fa-instagram" style="color:#E1306C;"></i></a>
             </div>
         </div>
     </footer>
