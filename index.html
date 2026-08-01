@@ -23,7 +23,7 @@
     <style>
         .social-links { display: flex; align-items: center; gap: 20px; }
         .social-links a { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; }
-        .social-links i { font-size: 26px; transition: transform 0.2s ease, opacity 0.2s ease; }
+        .social-links i { font-size: 32px; transition: transform 0.2s ease, opacity 0.2s ease; }
         .social-links a:hover i { transform: translateY(-2px); opacity: 0.85; }
     </style>
     <!-- Google tag (gtag.js) -->
@@ -271,7 +271,6 @@ The first 100 people who chose to assign value to Nothing.
             <p>&copy; 2026 NOTHING. An Ongoing Social Experiment.</p>
             <div class="social-links">
                 <a href="#" aria-label="Twitter" title="Twitter"><i class="fa-brands fa-x-twitter" style="color:#ffffff;"></i></a>
-                <a href="#" aria-label="Etherscan" title="Etherscan"><i class="fa-solid fa-chart-line" style="color:#21325B;"></i></a>
                 <a href="https://github.com/falcongold83-dotcom/nothing" target="_blank" aria-label="Github" title="Github"><i class="fa-brands fa-github" style="color:#ffffff;"></i></a>
                 <a href="https://instagram.com/nothinglab1" target="_blank" aria-label="Instagram" title="Instagram"><i class="fa-brands fa-instagram" style="color:#E1306C;"></i></a>
             </div>
@@ -354,7 +353,7 @@ for (let i = 1; i <= 100; i++) {
     } else {
 
       first100List.innerHTML += `
-        <div class="member available" onclick="openFirst100Modal(${number})">
+        <div class="member available" onclick="openFirst100Modal('${number}')">
             <span>#${number}</span>
         </div>
         `;
@@ -363,9 +362,21 @@ for (let i = 1; i <= 100; i++) {
 
 }
         function openFirst100Modal(number) {
+            document.getElementById("selectedPosition").textContent = "#" + number;
+            document.getElementById("first100Modal").classList.add("active");
+        }
 
-  
-}
+        function closeFirst100Modal() {
+            document.getElementById("first100Modal").classList.remove("active");
+        }
+
+        document.getElementById("first100Modal").addEventListener("click", function(e) {
+            if (e.target === this) closeFirst100Modal();
+        });
+
+        document.querySelector(".continue-first100").addEventListener("click", function() {
+            closeFirst100Modal();
+        });
         </script>
         <!-- FIRST 100 MODAL -->
 
