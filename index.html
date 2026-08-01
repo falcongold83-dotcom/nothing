@@ -121,8 +121,8 @@ The first 100 people who chose to assign value to Nothing.
 <div id="first100-list"></div>
 
 
-<div class="remaining">
-1 / 100 CLAIMED
+<div class="remaining" id="claimedCount">
+0 / 100 CLAIMED
 </div>
 
 
@@ -327,10 +327,7 @@ The first 100 people who chose to assign value to Nothing.
 const first100List = document.getElementById("first100-list");
 
 const claimedMembers = {
-    4: {
-        name: "Anonymous",
-        crypto: "0.005 BTC"
-    }
+
 };
 
 for (let i = 1; i <= 100; i++) {
@@ -339,13 +336,16 @@ for (let i = 1; i <= 100; i++) {
 
     if (claimedMembers[i]) {
 
+        const linkHtml = claimedMembers[i].link
+            ? `<a href="${claimedMembers[i].link}" target="_blank" class="tx-link" onclick="event.stopPropagation()"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>`
+            : '';
+
         first100List.innerHTML += `
-        <div class="member claimed">
+        <div class="member claimed" data-tooltip="${claimedMembers[i].crypto}">
             <span>#${number}</span>
             <div>
                 <strong>${claimedMembers[i].name}</strong>
-                <br>
-                <small>${claimedMembers[i].crypto}</small>
+                ${linkHtml}
             </div>
         </div>
         `;
@@ -361,6 +361,9 @@ for (let i = 1; i <= 100; i++) {
     }
 
 }
+
+document.getElementById("claimedCount").textContent = Object.keys(claimedMembers).length + " / 100 CLAIMED";
+
         function openFirst100Modal(number) {
             document.getElementById("selectedPosition").textContent = "#" + number;
             document.getElementById("first100Modal").classList.add("active");
