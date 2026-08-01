@@ -49,7 +49,7 @@
         <div class="nav-links">
             <a href="#about">Experiment</a>
             <a href="#wallets">Contribute</a>
-            <button class="btn-primary-sm" onclick="openModal()">I've Paid</button>
+            <button class="btn-primary-sm" onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSc5mqLDK37pfhTiyRblpoKcSND_MuKxV-UxJVbbawXvLMvCjg/viewform', '_blank')">I've Paid</button>
         </div>
     </nav>
 
@@ -258,7 +258,7 @@ The first 100 people who chose to assign value to Nothing.
             </div>
 
             <div class="action-footer reveal">
-                <button class="btn-glow" onclick="openModal()">I've Paid</button>
+                <button class="btn-glow" onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSc5mqLDK37pfhTiyRblpoKcSND_MuKxV-UxJVbbawXvLMvCjg/viewform', '_blank')">I've Paid</button>
             </div>
         </div>
     </section>
@@ -373,12 +373,14 @@ document.getElementById("claimedCount").textContent = Object.keys(claimedMembers
             document.getElementById("first100Modal").classList.remove("active");
         }
 
-        document.getElementById("first100Modal").addEventListener("click", function(e) {
-            if (e.target === this) closeFirst100Modal();
-        });
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById("first100Modal").addEventListener("click", function(e) {
+                if (e.target === this) closeFirst100Modal();
+            });
 
-        document.querySelector(".continue-first100").addEventListener("click", function() {
-            closeFirst100Modal();
+            document.querySelector(".continue-first100").addEventListener("click", function() {
+                closeFirst100Modal();
+            });
         });
         </script>
         <!-- FIRST 100 MODAL -->
