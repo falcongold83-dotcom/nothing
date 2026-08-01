@@ -856,19 +856,21 @@ body{
 .first100-modal-box {
     background: #0a0a0a;
     border: 1px solid #333;
+    border-top: 2px solid #D4AF37;
     width: 100%;
     max-width: 420px;
-    padding: 2.5rem;
-    border-radius: 8px;
+    padding: 3rem 2.5rem 2.5rem;
+    border-radius: 12px;
     position: relative;
     text-align: center;
     animation: modal-slide 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .first100-modal-box h2 {
-    font-size: 1.3rem;
-    letter-spacing: 2px;
-    margin-bottom: 1rem;
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: 4px;
+    margin-bottom: 0.8rem;
 }
 
 .first100-modal-box p {
@@ -876,51 +878,93 @@ body{
     font-size: 0.9rem;
 }
 
+.first100-modal-box p strong {
+    color: #D4AF37;
+    letter-spacing: 1px;
+}
+
 .first100-modal-box h3 {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 1px;
     color: var(--text-secondary);
-    margin: 1.5rem 0 1rem;
+    margin: 2rem 0 1.2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
 }
 
 .first100-modal-box label {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     text-align: left;
-    margin-bottom: 10px;
+    margin-bottom: 14px;
     text-transform: none;
     letter-spacing: normal;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     color: white;
+    cursor: pointer;
+}
+
+.first100-modal-box input[type="radio"] {
+    width: 16px;
+    height: 16px;
+    accent-color: #D4AF37;
     cursor: pointer;
 }
 
 .first100-modal-box input[type="text"] {
-    margin-top: 10px;
-    margin-bottom: 1.5rem;
+    margin-top: 6px;
+    margin-bottom: 1.8rem;
+    border-radius: 4px;
 }
 
 .close-first100 {
     position: absolute;
-    top: 15px;
+    top: 18px;
     right: 20px;
     background: none;
     border: none;
-    color: white;
+    color: var(--text-secondary);
     font-size: 1.5rem;
     line-height: 1;
     cursor: pointer;
+    transition: color 0.2s;
+}
+
+.close-first100:hover {
+    color: white;
 }
 
 .continue-first100 {
     width: 100%;
-    padding: 15px;
+    padding: 16px;
     background: white;
     color: black;
     border: none;
+    border-radius: 4px;
     font-weight: 700;
     cursor: pointer;
     text-transform: uppercase;
-    letter-spacing: 2px;
+    letter-spacing: 3px;
+    transition: var(--transition);
+    box-shadow: 0 0 0 rgba(255,255,255,0);
+}
+
+.continue-first100:hover {
+    box-shadow: 0 0 25px rgba(255,255,255,0.3);
+    transform: scale(1.02);
+}
+
+/* Highlight pulse — draws attention to the wallets section when scrolled to */
+@keyframes wallet-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(212,175,55,0.5); }
+    70% { box-shadow: 0 0 0 25px rgba(212,175,55,0); }
+    100% { box-shadow: 0 0 0 0 rgba(212,175,55,0); }
+}
+
+.wallet-highlight {
+    animation: wallet-pulse 1.4s ease-out 2;
+    border-radius: 16px;
 }
