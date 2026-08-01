@@ -379,11 +379,36 @@ document.getElementById("claimedCount").textContent = Object.keys(claimedMembers
             });
 
             document.querySelector(".continue-first100").addEventListener("click", function() {
+                const selectedIdentity = document.querySelector('input[name="identity"]:checked').value;
+                const nameInput = document.getElementById("displayNameInput");
+                const errorMsg = document.getElementById("first100Error");
+
+                if (selectedIdentity === "display" && nameInput.value.trim() === "") {
+                    nameInput.classList.add("input-error");
+                    errorMsg.classList.add("show");
+                    nameInput.focus();
+                    return;
+                }
+
+                nameInput.classList.remove("input-error");
+                errorMsg.classList.remove("show");
                 closeFirst100Modal();
                 document.getElementById("wallets").scrollIntoView({ behavior: "smooth" });
                 const walletGrid = document.querySelector(".wallet-grid");
                 walletGrid.classList.add("wallet-highlight");
                 setTimeout(() => walletGrid.classList.remove("wallet-highlight"), 3000);
+            });
+
+            document.querySelectorAll('input[name="identity"]').forEach(function(radio) {
+                radio.addEventListener("change", function() {
+                    document.getElementById("displayNameInput").classList.remove("input-error");
+                    document.getElementById("first100Error").classList.remove("show");
+                });
+            });
+
+            document.getElementById("displayNameInput").addEventListener("input", function() {
+                this.classList.remove("input-error");
+                document.getElementById("first100Error").classList.remove("show");
             });
         });
         </script>
@@ -425,6 +450,7 @@ document.getElementById("claimedCount").textContent = Object.keys(claimedMembers
         type="text"
         placeholder="Your display name">
 
+        <div class="first100-error" id="first100Error">Please enter a display name, or choose Anonymous.</div>
 
         <button class="continue-first100">
             Continue
