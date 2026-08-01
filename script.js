@@ -94,49 +94,6 @@ function showToast() {
 }
 
 /**
- * MODAL LOGIC
- */
-const modal = document.getElementById("modalOverlay");
-
-function openModal() {
-    modal.style.display = "flex";
-    document.body.style.overflow = "hidden";
-}
-
-function closeModal() {
-    modal.style.display = "none";
-    document.body.style.overflow = "auto";
-}
-
-// Close modal when clicking outside
-window.onclick = function(event) {
-    if (event.target == modal) {
-        closeModal();
-    }
-}
-
-/**
- * FORM SUBMISSION (Simulated)
- */
-document.getElementById("paymentForm").addEventListener("submit", function(e) {
-    e.preventDefault();
-    const btn = this.querySelector(".btn-submit");
-    const originalText = btn.innerText;
-    
-    btn.innerText = "VERIFYING...";
-    btn.disabled = true;
-
-    // Simulate blockchain verification lag
-    setTimeout(() => {
-        alert("Transaction recorded. You will receive Nothing shortly.");
-        this.reset();
-        btn.innerText = originalText;
-        btn.disabled = false;
-        closeModal();
-    }, 2000);
-});
-
-/**
  * GENERATE CONTRIBUTORS LIST
  */
 
@@ -208,6 +165,3 @@ function updateDayCounter() {
 }
 
 updateDayCounter();
-
-
-
