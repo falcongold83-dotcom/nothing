@@ -90,7 +90,7 @@
                 </div>
                 <div class="stat-item reveal">
                     <span class="stat-label">NAMES CLAIMED</span>
-                    <h2 class="stat-value" data-target="100">000</h2>
+                    <h2 class="stat-value" id="namesClaimedStat" data-target="100">000</h2>
                 </div>
                 <div class="stat-item reveal">
                    <span class="stat-label">NOTHING PROMISED</span>
@@ -277,47 +277,6 @@ The first 100 people who chose to assign value to Nothing.
         </div>
     </footer>
 
-    <!-- Modal -->
-    <div class="modal-overlay" id="modalOverlay">
-        <div class="modal-card">
-            <button class="close-modal" onclick="closeModal()">
-                <i data-lucide="x"></i>
-            </button>
-            <h3>Verify Contribution</h3>
-            <p>Your details will be recorded on the public wall.</p>
-            <form id="paymentForm">
-                <div class="form-group">
-                    <label>Name</label>
-                    <input type="text" placeholder="Your Name or Alias" required id="formName">
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Country</label>
-                        <input type="text" placeholder="Global" id="formCountry">
-                    </div>
-                    <div class="form-group">
-                        <label>Crypto</label>
-                        <select id="formCrypto">
-                            <option>BTC</option>
-                            <option>ETH</option>
-                            <option>BNB</option>
-                            <option>USDT</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Transaction Hash</label>
-                    <input type="text" placeholder="0x..." required id="formHash">
-                </div>
-                <div class="form-group">
-                    <label>Amount (USD Value)</label>
-                    <input type="number" step="0.01" placeholder="0.00" required id="formAmount">
-                </div>
-                <button type="submit" class="btn-submit">Submit Record</button>
-            </form>
-        </div>
-    </div>
-
     <!-- Notification Toast -->
     <div id="toast" class="toast">Address copied to clipboard</div>
 
@@ -363,6 +322,7 @@ for (let i = 1; i <= 100; i++) {
 }
 
 document.getElementById("claimedCount").textContent = Object.keys(claimedMembers).length + " / 100 CLAIMED";
+document.getElementById("namesClaimedStat").textContent = String(Object.keys(claimedMembers).length).padStart(3, "0");
 
         function openFirst100Modal(number) {
             document.getElementById("selectedPosition").textContent = "#" + number;
