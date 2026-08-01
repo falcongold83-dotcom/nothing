@@ -94,88 +94,74 @@ function showToast() {
 }
 
 /**
- * MODAL LOGIC
- */
-const modal = document.getElementById("modalOverlay");
-
-function openModal() {
-    modal.style.display = "flex";
-    document.body.style.overflow = "hidden";
-}
-
-function closeModal() {
-    modal.style.display = "none";
-    document.body.style.overflow = "auto";
-}
-
-// Close modal when clicking outside
-window.onclick = function(event) {
-    if (event.target == modal) {
-        closeModal();
-    }
-}
-
-/**
- * FORM SUBMISSION (Simulated)
- */
-document.getElementById("paymentForm").addEventListener("submit", function(e) {
-    e.preventDefault();
-    const btn = this.querySelector(".btn-submit");
-    const originalText = btn.innerText;
-    
-    btn.innerText = "VERIFYING...";
-    btn.disabled = true;
-
-    // Simulate blockchain verification lag
-    setTimeout(() => {
-        alert("Transaction recorded. You will receive Nothing shortly.");
-        this.reset();
-        btn.innerText = originalText;
-        btn.disabled = false;
-        closeModal();
-    }, 2000);
-});
-
-/**
  * GENERATE CONTRIBUTORS LIST
  */
-const contributorList = document.getElementById("contributorList");
-const contributors = [
-    { id: "0001", name: "Satoshi's Ghost", amount: "0.5 BTC" },
-    { id: "0002", name: "Void Walker", amount: "10 ETH" },
-    { id: "0003", name: "Nihilist_99", amount: "5,000 USDT" }
-];
 
-function initContributors() {
-    let html = "";
-    
-    // Add real simulated contributors
-    contributors.forEach(c => {
-        html += `
-            <div class="contributor-card reveal">
-                <span class="contributor-id">#${c.id}</span>
-                <span class="contributor-name">${c.name}</span>
-                <span class="contributor-val">${c.amount}</span>
-            </div>
-        `;
-    });
-
-    // Fill the rest of the 100 with "Waiting"
-    for (let i = 4; i <= 100; i++) {
-        const id = i.toString().padStart(4, '0');
-        html += `
-            <div class="contributor-card reveal">
-                <span class="contributor-id">#${id}</span>
-                <span class="contributor-status">Waiting for Nothing...</span>
-            </div>
-        `;
-    }
-    
-    contributorList.innerHTML = html;
-}
-
+   
+ 
 // Initialize the list
-initContributors();
+
 
 // Initial check for elements in view
 revealOnScroll();
+
+const cursor = document.getElementById("cursor");
+console.log("Cursor found:", cursor);
+
+let mouseX = 0;
+let mouseY = 0;
+let cursorX = 0;
+let cursorY = 0;
+
+document.addEventListener("mousemove", (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+});
+
+function animateCursor() {
+cursorX = mouseX;
+cursorY = mouseY;
+
+    cursor.style.left = cursorX + "px";
+    cursor.style.top = cursorY + "px";
+
+    requestAnimationFrame(animateCursor);
+}
+
+animateCursor();
+
+document.querySelectorAll("a, button, .wallet-card").forEach((el) => {
+
+    el.addEventListener("mouseenter", () => {
+        cursor.style.width = "36px";
+        cursor.style.height = "36px";
+        cursor.style.background = "rgba(255,255,255,.08)";
+    });
+
+    el.addEventListener("mouseleave", () => {
+        cursor.style.width = "18px";
+        cursor.style.height = "18px";
+        cursor.style.background = "rgba(255,255,255,.15)";
+    });
+
+});
+// ===== Automatic Day Counter =====
+const projectStart = new Date("2026-07-26");
+
+function updateDayCounter() {
+    const today = new Date();
+
+    // حذف ساعت برای جلوگیری از اختلاف زمانی
+    projectStart.setHours(0, 0, 0, 0);
+    today.setHours(0, 0, 0, 0);
+
+    const diffTime = today - projectStart;
+    const day = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+    const counter = document.getElementById("dayCounter");
+    if (counter) {
+        counter.textContent = String(day).padStart(3, "0");
+    }
+}
+
+updateDayCounter();
