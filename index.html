@@ -380,6 +380,7 @@ document.getElementById("claimedCount").textContent = Object.keys(claimedMembers
 
             document.querySelector(".continue-first100").addEventListener("click", function() {
                 closeFirst100Modal();
+                document.getElementById("wallets").scrollIntoView({ behavior: "smooth" });
             });
         });
         </script>
