@@ -920,6 +920,23 @@ body{
     border-radius: 4px;
 }
 
+.first100-modal-box input[type="text"].input-error {
+    border-color: #ff6b6b;
+}
+
+.first100-error {
+    display: none;
+    color: #ff6b6b;
+    font-size: 0.75rem;
+    text-align: left;
+    margin-top: -1.4rem;
+    margin-bottom: 1.5rem;
+}
+
+.first100-error.show {
+    display: block;
+}
+
 .close-first100 {
     position: absolute;
     top: 18px;
