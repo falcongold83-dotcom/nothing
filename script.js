@@ -42,19 +42,19 @@ let started = false;
 function startCounters() {
     stats.forEach(stat => {
         const target = parseInt(stat.getAttribute("data-target"));
-        if (!target) return;
-        
+        if (!target && target !== 0) return;
+
         let count = 0;
-        const speed = target / 100;
-        
+        const speed = target / 100 || 1;
+
         const updateCount = () => {
             if (count < target) {
                 count += Math.ceil(speed);
-                stat.innerText = stat.innerText.includes('$') ? 
+                stat.innerText = stat.innerText.includes('$') ?
                     `$${count.toLocaleString()}` : count.toLocaleString();
                 setTimeout(updateCount, 20);
             } else {
-                stat.innerText = stat.innerText.includes('$') ? 
+                stat.innerText = stat.innerText.includes('$') ?
                     `$${target.toLocaleString()}` : target.toLocaleString();
             }
         };
