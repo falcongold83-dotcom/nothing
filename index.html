@@ -90,7 +90,7 @@
                 </div>
                 <div class="stat-item reveal">
                     <span class="stat-label">NAMES CLAIMED</span>
-                    <h2 class="stat-value" id="namesClaimedStat" data-target="100">000</h2>
+                    <h2 class="stat-value" id="namesClaimedStat" data-target="0">000</h2>
                 </div>
                 <div class="stat-item reveal">
                    <span class="stat-label">NOTHING PROMISED</span>
@@ -321,8 +321,11 @@ for (let i = 1; i <= 100; i++) {
 
 }
 
-document.getElementById("claimedCount").textContent = Object.keys(claimedMembers).length + " / 100 CLAIMED";
-document.getElementById("namesClaimedStat").textContent = String(Object.keys(claimedMembers).length).padStart(3, "0");
+const claimedCountNum = Object.keys(claimedMembers).length;
+document.getElementById("claimedCount").textContent = claimedCountNum + " / 100 CLAIMED";
+const namesClaimedStatEl = document.getElementById("namesClaimedStat");
+namesClaimedStatEl.setAttribute("data-target", claimedCountNum);
+namesClaimedStatEl.textContent = String(claimedCountNum).padStart(3, "0");
 
         function openFirst100Modal(number) {
             document.getElementById("selectedPosition").textContent = "#" + number;
@@ -416,6 +419,7 @@ document.getElementById("namesClaimedStat").textContent = String(Object.keys(cla
             Continue
         </button>
 
+    </div>
 
 </div>
 
