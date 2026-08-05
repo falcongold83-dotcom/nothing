@@ -26,15 +26,21 @@
         .social-links i { font-size: 32px; transition: transform 0.2s ease, opacity 0.2s ease; }
         .social-links a:hover i { transform: translateY(-2px); opacity: 0.85; }
     </style>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-LV5WJ728KN"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-LV5WJ728KN');
-</script>
+    <!-- Google tag (gtag.js) — loaded only after cookie consent, see cookie-consent script near </body> -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      window.loadGoogleAnalytics = function() {
+        if (window.__gaLoaded) return;
+        window.__gaLoaded = true;
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=G-LV5WJ728KN';
+        document.head.appendChild(s);
+        gtag('js', new Date());
+        gtag('config', 'G-LV5WJ728KN');
+      };
+    </script>
 </head>
 <body>
 
@@ -86,7 +92,7 @@
                 </div>
                 <div class="stat-item reveal">
                    <span class="stat-label">THE FIRST 100</span>
-                   <h2 class="stat-value"data-target="100">100</h2>
+                   <h2 class="stat-value" data-target="100">100</h2>
                 </div>
                 <div class="stat-item reveal">
                     <span class="stat-label">NAMES CLAIMED</span>
@@ -426,6 +432,54 @@ namesClaimedStatEl.textContent = String(claimedCountNum).padStart(3, "0");
 
 </div>
 
+  <!-- Cookie Consent Banner -->
+  <div class="cookie-banner" id="cookieBanner">
+    <div class="cookie-banner-text">
+      <p>This site uses cookies for basic analytics (page views) to understand how many people find NOTHING. No personal data is sold or shared. <a href="#" id="cookieLearnMore">Learn more</a></p>
+    </div>
+    <div class="cookie-banner-actions">
+      <button class="cookie-btn cookie-decline" id="cookieDecline">Decline</button>
+      <button class="cookie-btn cookie-accept" id="cookieAccept">Accept</button>
+    </div>
+  </div>
+
   <script src="script.js"></script>
+  <script>
+    (function () {
+      var CONSENT_KEY = 'nothing_cookie_consent';
+      var banner = document.getElementById('cookieBanner');
+      var accept = document.getElementById('cookieAccept');
+      var decline = document.getElementById('cookieDecline');
+      var learnMore = document.getElementById('cookieLearnMore');
+
+      function hideBanner() {
+        banner.classList.remove('visible');
+      }
+
+      var saved = localStorage.getItem(CONSENT_KEY);
+      if (saved === 'granted') {
+        window.loadGoogleAnalytics();
+      } else if (saved !== 'denied') {
+        // No choice made yet — show the banner
+        setTimeout(function () { banner.classList.add('visible'); }, 600);
+      }
+
+      accept.addEventListener('click', function () {
+        localStorage.setItem(CONSENT_KEY, 'granted');
+        window.loadGoogleAnalytics();
+        hideBanner();
+      });
+
+      decline.addEventListener('click', function () {
+        localStorage.setItem(CONSENT_KEY, 'denied');
+        hideBanner();
+      });
+
+      learnMore.addEventListener('click', function (e) {
+        e.preventDefault();
+        alert('We use Google Analytics to count anonymous page views only — no ads, no personal profiling, no data sold to third parties. You can change your choice anytime by clearing your browser data for this site.');
+      });
+    })();
+  </script>
   </body>
     </html>
