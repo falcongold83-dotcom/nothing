@@ -165,3 +165,19 @@ function updateDayCounter() {
 }
 
 updateDayCounter();
+
+/**
+ * FAQ ACCORDION
+ */
+function toggleFaq(buttonEl) {
+    const item = buttonEl.closest(".faq-item");
+    const wasActive = item.classList.contains("active");
+
+    document.querySelectorAll(".faq-item.active").forEach((openItem) => {
+        openItem.classList.remove("active");
+    });
+
+    if (!wasActive) {
+        item.classList.add("active");
+    }
+}
