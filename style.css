@@ -105,7 +105,8 @@ section {
 
 /* --- Hero Section --- */
 .hero {
-    height: 100vh;
+    min-height: 100vh;
+    padding-top: 110px;
     display: flex;
     align-items: center;
     justify-content: center;
