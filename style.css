@@ -1080,3 +1080,20 @@ body{
     .faq-question { padding: 18px 20px; font-size: 0.95rem; }
     .faq-answer p { padding: 0 20px 18px; }
 }
+
+/* --- Last Activity + Wallet Note --- */
+.last-activity {
+    margin-top: 10px;
+    color: #666;
+    font-size: 12.5px;
+    font-style: italic;
+}
+
+.wallet-note {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    font-weight: 300;
+    max-width: 520px;
+    margin: -1.5rem auto 2.5rem;
+}
