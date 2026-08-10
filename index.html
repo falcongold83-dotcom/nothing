@@ -125,6 +125,7 @@ The first 100 people who chose to assign value to Nothing.
 0 / 100 CLAIMED
 </div>
 
+<div class="last-activity" id="lastActivity"></div>
 
 </div>
 
@@ -216,6 +217,7 @@ The first 100 people who chose to assign value to Nothing.
     <section class="wallet-section" id="wallets">
         <div class="container">
             <h2 class="section-title reveal">Select Your Asset</h2>
+            <p class="wallet-note reveal">There is no minimum. Any amount counts as a contribution — you only cover the network's transaction fee.</p>
             <div class="wallet-grid">
                 <!-- Bitcoin -->
                 <div class="wallet-card reveal">
@@ -348,6 +350,10 @@ The first 100 people who chose to assign value to Nothing.
 
 const first100List = document.getElementById("first100-list");
 
+// Example of how to add a real claimed member later:
+// const claimedMembers = {
+//   1: { name: "Alex", link: "https://etherscan.io/tx/0x...", crypto: "ETH", claimedAt: "2026-08-10T14:30:00Z" }
+// };
 const claimedMembers = {
 
 };
@@ -390,10 +396,40 @@ const namesClaimedStatEl = document.getElementById("namesClaimedStat");
 namesClaimedStatEl.setAttribute("data-target", claimedCountNum);
 namesClaimedStatEl.textContent = String(claimedCountNum).padStart(3, "0");
 
+function formatRelativeTime(dateStr) {
+    const then = new Date(dateStr);
+    const diffMs = Date.now() - then.getTime();
+    const mins = Math.floor(diffMs / 60000);
+    if (mins < 1) return "just now";
+    if (mins < 60) return mins + (mins === 1 ? " minute ago" : " minutes ago");
+    const hours = Math.floor(mins / 60);
+    if (hours < 24) return hours + (hours === 1 ? " hour ago" : " hours ago");
+    const days = Math.floor(hours / 24);
+    return days + (days === 1 ? " day ago" : " days ago");
+}
+
+function renderLastActivity(members) {
+    const el = document.getElementById("lastActivity");
+    if (!el) return;
+    const timestamps = Object.values(members)
+        .map((m) => m.claimedAt)
+        .filter(Boolean)
+        .map((d) => new Date(d));
+
+    if (timestamps.length === 0) {
+        el.textContent = "No claims yet — be the first.";
+        return;
+    }
+    const latest = new Date(Math.max(...timestamps));
+    el.textContent = "Last claimed: " + formatRelativeTime(latest);
+}
+
 const spotsLeftNum = 100 - claimedCountNum;
 const spotsLeftStatEl = document.getElementById("spotsLeftStat");
 spotsLeftStatEl.setAttribute("data-target", spotsLeftNum);
 spotsLeftStatEl.textContent = String(spotsLeftNum);
+
+renderLastActivity(claimedMembers);
 
         function openFirst100Modal(number) {
             document.getElementById("selectedPosition").textContent = "#" + number;
