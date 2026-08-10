@@ -85,8 +85,8 @@
                    <h2 class="stat-value" id="dayCounter">001</h2>
                 </div>
                 <div class="stat-item reveal">
-                   <span class="stat-label">THE FIRST 100</span>
-                   <h2 class="stat-value"data-target="100">100</h2>
+                   <span class="stat-label">SPOTS LEFT</span>
+                   <h2 class="stat-value" id="spotsLeftStat" data-target="100">100</h2>
                 </div>
                 <div class="stat-item reveal">
                     <span class="stat-label">NAMES CLAIMED</span>
@@ -326,6 +326,11 @@ document.getElementById("claimedCount").textContent = claimedCountNum + " / 100 
 const namesClaimedStatEl = document.getElementById("namesClaimedStat");
 namesClaimedStatEl.setAttribute("data-target", claimedCountNum);
 namesClaimedStatEl.textContent = String(claimedCountNum).padStart(3, "0");
+
+const spotsLeftNum = 100 - claimedCountNum;
+const spotsLeftStatEl = document.getElementById("spotsLeftStat");
+spotsLeftStatEl.setAttribute("data-target", spotsLeftNum);
+spotsLeftStatEl.textContent = String(spotsLeftNum);
 
         function openFirst100Modal(number) {
             document.getElementById("selectedPosition").textContent = "#" + number;
