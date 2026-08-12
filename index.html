@@ -8,8 +8,8 @@
     <meta property="og:title" content="NOTHING | An Ongoing Social Experiment">
     <meta property="og:description" content="How much would you pay knowing you will receive absolutely Nothing?">
     <meta property="og:type" content="website">
-    <meta property="og:image" content="images/preview.jpg">
-    <meta property="og:url" content="https://notinglab1.com">
+    <meta property="og:image" content="https://falcongold83-dotcom.github.io/nothing/images/preview.jpg">
+    <meta property="og:url" content="https://falcongold83-dotcom.github.io/nothing/">
     <meta name="twitter:card" content="summary_large_image">
     <!-- Typography: Inter for that premium tech feel -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -26,15 +26,21 @@
         .social-links i { font-size: 32px; transition: transform 0.2s ease, opacity 0.2s ease; }
         .social-links a:hover i { transform: translateY(-2px); opacity: 0.85; }
     </style>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-LV5WJ728KN"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-LV5WJ728KN');
-</script>
+    <!-- Google tag (gtag.js) — loaded only after cookie consent, see cookie-consent script near </body> -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      window.loadGoogleAnalytics = function() {
+        if (window.__gaLoaded) return;
+        window.__gaLoaded = true;
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=G-LV5WJ728KN';
+        document.head.appendChild(s);
+        gtag('js', new Date());
+        gtag('config', 'G-LV5WJ728KN');
+      };
+    </script>
 </head>
 <body>
 
@@ -85,8 +91,8 @@
                    <h2 class="stat-value" id="dayCounter">001</h2>
                 </div>
                 <div class="stat-item reveal">
-                   <span class="stat-label">SPOTS LEFT</span>
-                   <h2 class="stat-value" id="spotsLeftStat" data-target="100">100</h2>
+                   <span class="stat-label">THE FIRST 100</span>
+                   <h2 class="stat-value" data-target="100">100</h2>
                 </div>
                 <div class="stat-item reveal">
                     <span class="stat-label">NAMES CLAIMED</span>
@@ -125,7 +131,6 @@ The first 100 people who chose to assign value to Nothing.
 0 / 100 CLAIMED
 </div>
 
-<div class="last-activity" id="lastActivity"></div>
 
 </div>
 
@@ -137,79 +142,19 @@ The first 100 people who chose to assign value to Nothing.
     <!-- About Section -->
     <section class="about-section" id="about">
         <div class="container narrow reveal">
-            <h2 class="section-title">The Philosophy</h2>
+            <h2 class="section-title">From Nothing, Everything</h2>
             <p class="about-text">
-                In a world obsessed with utility, ROI, and constant acquisition, <strong>NOTHING</strong> challenges the fundamental nature of transaction. 
+                The universe began from nothing. Split a particle far enough and you don't find a smaller object — you find a quark. Split that, and matter dissolves into wave and probability. At the deepest layer of reality, there is no "thing." There is only pattern, motion, potential. <strong>Nothing is not the absence of everything — it is the foundation everything is built from.</strong>
             </p>
             <p class="about-text">
-                This is not a charity. This is not an investment. This is not a product. It is a mirror held up to the digital age. By contributing, you are making a conscious decision to detach value from expectation. 
+                The largest companies on Earth already know this. Amazon sells products it doesn't manufacture. Uber moves millions of riders without owning a single car. Airbnb is the world's largest hospitality company and owns no property. Real estate agents sell homes they will never own. The most valuable thing in the modern economy was never the object — it was the space between people, the trust, the connection. Capital detached itself from matter a long time ago.
             </p>
             <p class="about-text">
-                You will receive no token, no whitelist, no access, and no gratitude. You will receive exactly what we promised.
+                In a world obsessed with utility, ROI, and constant acquisition, <strong>NOTHING</strong> challenges the fundamental nature of transaction. This is not a charity. This is not an investment. This is not a product. It is a mirror held up to the digital age.
             </p>
-        </div>
-    </section>
-
-    <!-- FAQ Section -->
-    <section class="faq-section" id="faq">
-        <div class="container narrow">
-            <h2 class="section-title reveal">But Why?</h2>
-            <div class="faq-list reveal">
-                <div class="faq-item">
-                    <button class="faq-question" onclick="toggleFaq(this)">
-                        Is this a scam?
-                        <span class="faq-icon">+</span>
-                    </button>
-                    <div class="faq-answer">
-                        <p>Nothing is promised, and nothing is delivered. That is the entire agreement, stated upfront. There is no hidden reward to reveal later and no rug to pull, because there was never anything to pull.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <button class="faq-question" onclick="toggleFaq(this)">
-                        What happens after I pay?
-                        <span class="faq-icon">+</span>
-                    </button>
-                    <div class="faq-answer">
-                        <p>Your transaction confirms on the blockchain. Nothing else happens. If you claimed one of the First 100, your name or your anonymity is recorded on this page. That is the full extent of it.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <button class="faq-question" onclick="toggleFaq(this)">
-                        Why would anyone do this?
-                        <span class="faq-icon">+</span>
-                    </button>
-                    <div class="faq-answer">
-                        <p>That is the experiment. Some people find something meaningful in detaching value from expectation. Others just want to watch the number move. Both reactions are valid data.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <button class="faq-question" onclick="toggleFaq(this)">
-                        Can I get a refund?
-                        <span class="faq-icon">+</span>
-                    </button>
-                    <div class="faq-answer">
-                        <p>No. A refund implies something went wrong. Nothing did. You received exactly what was promised, in full.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <button class="faq-question" onclick="toggleFaq(this)">
-                        What happens to the money?
-                        <span class="faq-icon">+</span>
-                    </button>
-                    <div class="faq-answer">
-                        <p>Contributions sit in the wallets shown below. There is no roadmap, no fund allocation, and no use-of-proceeds statement, because there is no product being funded.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <button class="faq-question" onclick="toggleFaq(this)">
-                        Is my name public if I claim a spot?
-                        <span class="faq-icon">+</span>
-                    </button>
-                    <div class="faq-answer">
-                        <p>Only if you choose "Display name" when claiming. Choose "Anonymous" instead, and your position is listed with no identifying label at all.</p>
-                    </div>
-                </div>
-            </div>
+            <p class="about-text">
+                Every company you've ever paid has given you something it didn't truly own — repackaged, remarketed, resold. We are the only difference: we don't hide it. You will receive no token, no whitelist, no access, and no gratitude. You will receive exactly what was promised — nothing — and for the first time, that promise will be kept in full.
+            </p>
         </div>
     </section>
 
@@ -217,7 +162,6 @@ The first 100 people who chose to assign value to Nothing.
     <section class="wallet-section" id="wallets">
         <div class="container">
             <h2 class="section-title reveal">Select Your Asset</h2>
-            <p class="wallet-note reveal">There is no minimum. Any amount counts as a contribution — you only cover the network's transaction fee.</p>
             <div class="wallet-grid">
                 <!-- Bitcoin -->
                 <div class="wallet-card reveal">
@@ -335,9 +279,9 @@ The first 100 people who chose to assign value to Nothing.
             <div class="footer-logo">NOTHING</div>
             <p>&copy; 2026 NOTHING. An Ongoing Social Experiment.</p>
             <div class="social-links">
-                <a href="https://x.com/notinglab1" target="_blank" aria-label="Twitter" title="Twitter"><i class="fa-brands fa-x-twitter" style="color:#ffffff;"></i></a>
+                <a href="https://x.com/NOTINGLAB" target="_blank" aria-label="Twitter" title="Twitter"><i class="fa-brands fa-x-twitter" style="color:#ffffff;"></i></a>
                 <a href="https://github.com/falcongold83-dotcom/nothing" target="_blank" aria-label="Github" title="Github"><i class="fa-brands fa-github" style="color:#ffffff;"></i></a>
-                <a href="https://instagram.com/notinglab1" target="_blank" aria-label="Instagram" title="Instagram"><i class="fa-brands fa-instagram" style="color:#E1306C;"></i></a>
+                <a href="https://instagram.com/nothinglab1" target="_blank" aria-label="Instagram" title="Instagram"><i class="fa-brands fa-instagram" style="color:#E1306C;"></i></a>
             </div>
         </div>
     </footer>
@@ -350,10 +294,6 @@ The first 100 people who chose to assign value to Nothing.
 
 const first100List = document.getElementById("first100-list");
 
-// Example of how to add a real claimed member later:
-// const claimedMembers = {
-//   1: { name: "Alex", link: "https://etherscan.io/tx/0x...", crypto: "ETH", claimedAt: "2026-08-10T14:30:00Z" }
-// };
 const claimedMembers = {
 
 };
@@ -395,41 +335,6 @@ document.getElementById("claimedCount").textContent = claimedCountNum + " / 100 
 const namesClaimedStatEl = document.getElementById("namesClaimedStat");
 namesClaimedStatEl.setAttribute("data-target", claimedCountNum);
 namesClaimedStatEl.textContent = String(claimedCountNum).padStart(3, "0");
-
-function formatRelativeTime(dateStr) {
-    const then = new Date(dateStr);
-    const diffMs = Date.now() - then.getTime();
-    const mins = Math.floor(diffMs / 60000);
-    if (mins < 1) return "just now";
-    if (mins < 60) return mins + (mins === 1 ? " minute ago" : " minutes ago");
-    const hours = Math.floor(mins / 60);
-    if (hours < 24) return hours + (hours === 1 ? " hour ago" : " hours ago");
-    const days = Math.floor(hours / 24);
-    return days + (days === 1 ? " day ago" : " days ago");
-}
-
-function renderLastActivity(members) {
-    const el = document.getElementById("lastActivity");
-    if (!el) return;
-    const timestamps = Object.values(members)
-        .map((m) => m.claimedAt)
-        .filter(Boolean)
-        .map((d) => new Date(d));
-
-    if (timestamps.length === 0) {
-        el.textContent = "No claims yet — be the first.";
-        return;
-    }
-    const latest = new Date(Math.max(...timestamps));
-    el.textContent = "Last claimed: " + formatRelativeTime(latest);
-}
-
-const spotsLeftNum = 100 - claimedCountNum;
-const spotsLeftStatEl = document.getElementById("spotsLeftStat");
-spotsLeftStatEl.setAttribute("data-target", spotsLeftNum);
-spotsLeftStatEl.textContent = String(spotsLeftNum);
-
-renderLastActivity(claimedMembers);
 
         function openFirst100Modal(number) {
             document.getElementById("selectedPosition").textContent = "#" + number;
@@ -527,6 +432,54 @@ renderLastActivity(claimedMembers);
 
 </div>
 
+  <!-- Cookie Consent Banner -->
+  <div class="cookie-banner" id="cookieBanner">
+    <div class="cookie-banner-text">
+      <p>This site uses cookies for basic analytics (page views) to understand how many people find NOTHING. No personal data is sold or shared. <a href="#" id="cookieLearnMore">Learn more</a></p>
+    </div>
+    <div class="cookie-banner-actions">
+      <button class="cookie-btn cookie-decline" id="cookieDecline">Decline</button>
+      <button class="cookie-btn cookie-accept" id="cookieAccept">Accept</button>
+    </div>
+  </div>
+
   <script src="script.js"></script>
+  <script>
+    (function () {
+      var CONSENT_KEY = 'nothing_cookie_consent';
+      var banner = document.getElementById('cookieBanner');
+      var accept = document.getElementById('cookieAccept');
+      var decline = document.getElementById('cookieDecline');
+      var learnMore = document.getElementById('cookieLearnMore');
+
+      function hideBanner() {
+        banner.classList.remove('visible');
+      }
+
+      var saved = localStorage.getItem(CONSENT_KEY);
+      if (saved === 'granted') {
+        window.loadGoogleAnalytics();
+      } else if (saved !== 'denied') {
+        // No choice made yet — show the banner
+        setTimeout(function () { banner.classList.add('visible'); }, 600);
+      }
+
+      accept.addEventListener('click', function () {
+        localStorage.setItem(CONSENT_KEY, 'granted');
+        window.loadGoogleAnalytics();
+        hideBanner();
+      });
+
+      decline.addEventListener('click', function () {
+        localStorage.setItem(CONSENT_KEY, 'denied');
+        hideBanner();
+      });
+
+      learnMore.addEventListener('click', function (e) {
+        e.preventDefault();
+        alert('We use Google Analytics to count anonymous page views only — no ads, no personal profiling, no data sold to third parties. You can change your choice anytime by clearing your browser data for this site.');
+      });
+    })();
+  </script>
   </body>
     </html>
