@@ -1,0 +1,73 @@
+/* subscribe-widget.css
+   Deliberately grayscale. No accent color — this isn't a feature being
+   sold, so it shouldn't look like one. Adjust the CSS variables below to
+   match whatever grays your site already uses. */
+
+:root {
+  --notify-fg: #e8e8e8;
+  --notify-fg-dim: #7a7a7a;
+  --notify-bg: transparent;
+  --notify-border: #3a3a3a;
+}
+
+.notify-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: inherit;
+}
+
+.notify-label {
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+  color: var(--notify-fg-dim);
+}
+
+.notify-note {
+  margin-top: 0.4rem;
+  font-size: 0.75rem;
+  color: var(--notify-fg-dim);
+}
+
+#notify-toggle {
+  position: relative;
+  width: 2.6rem;
+  height: 1.4rem;
+  border: 1px solid var(--notify-border);
+  border-radius: 999px;
+  background: var(--notify-bg);
+  cursor: pointer;
+  padding: 0;
+  transition: border-color 0.2s ease;
+}
+
+#notify-toggle::after {
+  content: "";
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: 1.05rem;
+  height: 1.05rem;
+  border-radius: 50%;
+  background: var(--notify-fg-dim);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+#notify-toggle.is-on {
+  border-color: var(--notify-fg);
+}
+
+#notify-toggle.is-on::after {
+  transform: translateX(1.2rem);
+  background: var(--notify-fg);
+}
+
+#notify-toggle[disabled] {
+  opacity: 0.4;
+  cursor: default;
+}
+
+#notify-toggle:focus-visible {
+  outline: 1px solid var(--notify-fg);
+  outline-offset: 2px;
+}

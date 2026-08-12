@@ -1,170 +1,501 @@
-import { buildPushHTTPRequest } from "@pushforge/builder";
-import { pickMessage } from "./messages.js";
-// Note: this project intentionally ships English-only. If you add
-// languages later, that's where a `lang` field would come back in.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOTHING | An Ongoing Social Experiment</title>
+    <meta name="description" content="How much would you pay knowing you will receive absolutely Nothing?">
+    <meta property="og:title" content="NOTHING | An Ongoing Social Experiment">
+    <meta property="og:description" content="How much would you pay knowing you will receive absolutely Nothing?">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://falcongold83-dotcom.github.io/nothing/images/preview.jpg">
+    <meta property="og:url" content="https://falcongold83-dotcom.github.io/nothing/">
+    <meta name="twitter:card" content="summary_large_image">
+    <!-- Typography: Inter for that premium tech feel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="subscribe-widget.css">
+    <!-- Lucide Icons for clean UI -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Font Awesome for official brand icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .social-links { display: flex; align-items: center; gap: 20px; }
+        .social-links a { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; }
+        .social-links i { font-size: 32px; transition: transform 0.2s ease, opacity 0.2s ease; }
+        .social-links a:hover i { transform: translateY(-2px); opacity: 0.85; }
+    </style>
+    <!-- Google tag (gtag.js) — loaded only after cookie consent, see cookie-consent script near </body> -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      window.loadGoogleAnalytics = function() {
+        if (window.__gaLoaded) return;
+        window.__gaLoaded = true;
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=G-LV5WJ728KN';
+        document.head.appendChild(s);
+        gtag('js', new Date());
+        gtag('config', 'G-LV5WJ728KN');
+      };
+    </script>
+</head>
+<body>
 
-// ---- Config -----------------------------------------------------------
-// Probability that a given subscriber gets a notification on a given day.
-// Kept below 1 on purpose: even "nothing" shouldn't be reliable. Some days
-// nothing arrives, which is itself the point.
-const DAILY_SEND_PROBABILITY = 0.7;
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
 
-// Every push has "NOTHING" as the title. No icon badges, no emoji, no
-// engagement bait in the copy.
-const NOTIFICATION_TITLE = "NOTHING";
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-logo">NOTHING</div>
+        <div class="nav-links">
+            <a href="#about">Experiment</a>
+            <a href="#wallets">Contribute</a>
+            <button class="btn-primary-sm" onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSc5mqLDK37pfhTiyRblpoKcSND_MuKxV-UxJVbbawXvLMvCjg/viewform', '_blank')">I've Paid</button>
+        </div>
+    </nav>
 
-// CORS: only the site itself may call /api/*.
-const ALLOWED_ORIGIN = "https://notinglab1.com";
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content reveal">
+            <h1 class="glitch-text">NOTHING</h1>
+            <p class="subtitle">An Ongoing Social Experiment</p>
+            <div class="hero-question">
+                <p>How much would you pay knowing you will receive absolutely Nothing?</p>
+            </div>
+            <p class="hero-description">
+            This is not a product. There is no reward.<br>
+            No token. No NFT. No membership. No hidden benefit.<br><br>
 
-function corsHeaders() {
-  return {
-    "Access-Control-Allow-Origin": ALLOWED_ORIGIN,
-    "Access-Control-Allow-Methods": "POST, DELETE, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type",
-  };
-}
+             If you decide to contribute, you are paying for exactly what is promised.<br><br>
+            <strong>Nothing.</strong>
+</p>
+           
+        </div>
+          <div class="scroll-indicator">
+                <div class="mouse"></div>
+            </div>
+</section>
+    <!-- Live Stats -->
+   
+    <section class="stats-section" id="stats">
+        
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item reveal">
+                    <span class="stat-label">DAY</span>
+                   <h2 class="stat-value" id="dayCounter">001</h2>
+                </div>
+                <div class="stat-item reveal">
+                   <span class="stat-label">THE FIRST 100</span>
+                   <h2 class="stat-value" data-target="100">100</h2>
+                </div>
+                <div class="stat-item reveal">
+                    <span class="stat-label">NAMES CLAIMED</span>
+                    <h2 class="stat-value" id="namesClaimedStat" data-target="0">000</h2>
+                </div>
+                <div class="stat-item reveal">
+                   <span class="stat-label">NOTHING PROMISED</span>
+                   <h2 class="stat-value" data-target="100">100%</h2>
+                </div>
+            </div>
+        </div>
+    </section>
 
-async function hashEndpoint(endpoint) {
-  const data = new TextEncoder().encode(endpoint);
-  const digest = await crypto.subtle.digest("SHA-256", data);
-  return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, "0")).join("");
-}
 
-async function handleSubscribe(request, env) {
-  const body = await request.json();
-  const { endpoint, keys } = body || {};
+<!-- The First 100 Section -->
 
-  if (!endpoint || !keys?.p256dh || !keys?.auth) {
-    return new Response(JSON.stringify({ error: "invalid subscription" }), {
-      status: 400,
-      headers: { "Content-Type": "application/json", ...corsHeaders() },
-    });
-  }
+<section class="first100-section">
 
-  const id = await hashEndpoint(endpoint);
-  const record = {
-    endpoint,
-    keys: { p256dh: keys.p256dh, auth: keys.auth },
-    createdAt: new Date().toISOString(),
-    // Daily scheduling state — filled in by the first cron tick after creation.
-    planDate: null,
-    activeToday: false,
-    targetHour: null,
-    sentToday: false,
-  };
+<div class="container">
 
-  await env.SUBSCRIPTIONS.put(`sub:${id}`, JSON.stringify(record));
+<h2 class="section-title reveal">
+THE FIRST 100
+</h2>
 
-  return new Response(JSON.stringify({ ok: true }), {
-    status: 200,
-    headers: { "Content-Type": "application/json", ...corsHeaders() },
-  });
-}
 
-async function handleUnsubscribe(request, env) {
-  const body = await request.json();
-  const { endpoint } = body || {};
-  if (!endpoint) {
-    return new Response(JSON.stringify({ error: "missing endpoint" }), {
-      status: 400,
-      headers: { "Content-Type": "application/json", ...corsHeaders() },
-    });
-  }
-  const id = await hashEndpoint(endpoint);
-  await env.SUBSCRIPTIONS.delete(`sub:${id}`);
-  return new Response(JSON.stringify({ ok: true }), {
-    status: 200,
-    headers: { "Content-Type": "application/json", ...corsHeaders() },
-  });
-}
+<p class="first100-text reveal">
+The first 100 people who chose to assign value to Nothing.
+</p>
 
-async function sendPush(env, record) {
-  const message = pickMessage();
 
-  const { endpoint, headers, body } = await buildPushHTTPRequest({
-    privateJWK: JSON.parse(env.VAPID_PRIVATE_KEY),
-    subscription: {
-      endpoint: record.endpoint,
-      keys: record.keys,
-    },
-    message: {
-      payload: {
-        title: NOTIFICATION_TITLE,
-        body: message,
-      },
-      adminContact: env.VAPID_CONTACT_EMAIL || "mailto:admin@notinglab1.com",
-      options: {
-        ttl: 3600,
-        urgency: "low",
-      },
-    },
-  });
+<div class="first100-card reveal">
+<div id="first100-list"></div>
 
-  const res = await fetch(endpoint, { method: "POST", headers, body });
 
-  // 404/410 = the browser subscription is dead; caller should drop it.
-  return { ok: res.ok, dead: res.status === 404 || res.status === 410 };
-}
+<div class="remaining" id="claimedCount">
+0 / 100 CLAIMED
+</div>
 
-async function handleScheduled(env) {
-  const now = new Date();
-  const today = now.toISOString().slice(0, 10); // UTC date, e.g. 2026-08-12
-  const hour = now.getUTCHours();
 
-  let cursor;
-  do {
-    const list = await env.SUBSCRIPTIONS.list({ cursor });
-    cursor = list.cursor;
+</div>
 
-    for (const key of list.keys) {
-      const raw = await env.SUBSCRIPTIONS.get(key.name);
-      if (!raw) continue;
-      const record = JSON.parse(raw);
+</div>
 
-      // New day for this subscriber: decide (randomly) whether today is
-      // an "active" day, and if so, pick one random hour to send at.
-      if (record.planDate !== today) {
-        const isActiveToday = Math.random() < DAILY_SEND_PROBABILITY;
-        record.planDate = today;
-        record.activeToday = isActiveToday;
-        record.targetHour = isActiveToday ? Math.floor(Math.random() * 24) : null;
-        record.sentToday = false;
-      }
+</section>
 
-      if (record.activeToday && !record.sentToday && record.targetHour === hour) {
-        const result = await sendPush(env, record);
-        if (result.dead) {
-          await env.SUBSCRIPTIONS.delete(key.name);
-          continue;
-        }
-        record.sentToday = true;
-      }
 
-      await env.SUBSCRIPTIONS.put(key.name, JSON.stringify(record));
-    }
-  } while (cursor);
-}
+    <!-- About Section -->
+    <section class="about-section" id="about">
+        <div class="container narrow reveal">
+            <h2 class="section-title">From Nothing, Everything</h2>
+            <p class="about-text">
+                The universe began from nothing. Split a particle far enough and you don't find a smaller object — you find a quark. Split that, and matter dissolves into wave and probability. At the deepest layer of reality, there is no "thing." There is only pattern, motion, potential. <strong>Nothing is not the absence of everything — it is the foundation everything is built from.</strong>
+            </p>
+            <p class="about-text">
+                The largest companies on Earth already know this. Amazon sells products it doesn't manufacture. Uber moves millions of riders without owning a single car. Airbnb is the world's largest hospitality company and owns no property. Real estate agents sell homes they will never own. The most valuable thing in the modern economy was never the object — it was the space between people, the trust, the connection. Capital detached itself from matter a long time ago.
+            </p>
+            <p class="about-text">
+                In a world obsessed with utility, ROI, and constant acquisition, <strong>NOTHING</strong> challenges the fundamental nature of transaction. This is not a charity. This is not an investment. This is not a product. It is a mirror held up to the digital age.
+            </p>
+            <p class="about-text">
+                Every company you've ever paid has given you something it didn't truly own — repackaged, remarketed, resold. We are the only difference: we don't hide it. You will receive no token, no whitelist, no access, and no gratitude. You will receive exactly what was promised — nothing — and for the first time, that promise will be kept in full.
+            </p>
+        </div>
+    </section>
 
-export default {
-  async fetch(request, env) {
-    const url = new URL(request.url);
+    <!-- Wallet Section -->
+    <section class="wallet-section" id="wallets">
+        <div class="container">
+            <h2 class="section-title reveal">Select Your Asset</h2>
+            <div class="wallet-grid">
+                <!-- Bitcoin -->
+                <div class="wallet-card reveal">
+                    <div class="wallet-header">
+                        <i data-lucide="bitcoin" class="wallet-icon"></i>
+                        <span class="network-tag">Bitcoin Network</span>
+                    </div>
+                    <div class="qr-box">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=3DiZjb7VBmWhiJRTtu472BNNaw5ikieJej" alt="BTC QR">
+                    </div>
+                    <div class="address-container">
+                        <code class="wallet-address" id="btc-addr">3DiZjb7VBmWhiJRTtu472BNNaw5ikieJej</code>
+                        <button class="copy-btn" onclick="copyAddress('btc-addr')">
+                            <i data-lucide="copy"></i>
+                        </button>
+                    </div>
+                </div>
 
-    if (request.method === "OPTIONS") {
-      return new Response(null, { headers: corsHeaders() });
-    }
+                <!-- Ethereum -->
+                <div class="wallet-card reveal">
+                    <div class="wallet-header">
+                        <i data-lucide="coins" class="wallet-icon"></i>
+                        <span class="network-tag">ERC-20</span>
+                    </div>
+                    <div class="qr-box">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=0xf939d53855ac65220707003AEEEF35741F6CD177" alt="ETH QR">
+                    </div>
+                    <div class="address-container">
+                        <code class="wallet-address" id="eth-addr">0xf939d53855ac65220707003AEEEF35741F6CD177</code>
+                        <button class="copy-btn" onclick="copyAddress('eth-addr')">
+                            <i data-lucide="copy"></i>
+                        </button>
+                    </div>
+                </div>
 
-    if (url.pathname === "/api/subscribe" && request.method === "POST") {
-      return handleSubscribe(request, env);
-    }
+                <!-- BNB -->
+                <div class="wallet-card reveal">
+                    <div class="wallet-header">
+                        <i data-lucide="component" class="wallet-icon"></i>
+                        <span class="network-tag">BEP-20 (BSC)</span>
+                    </div>
+                    <div class="qr-box">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=0xf939d53855ac65220707003AEEEF35741F6CD177" alt="BNB QR">
+                    </div>
+                    <div class="address-container">
+                        <code class="wallet-address" id="bnb-addr">0xf939d53855ac65220707003AEEEF35741F6CD177</code>
+                        <button class="copy-btn" onclick="copyAddress('bnb-addr')">
+                            <i data-lucide="copy"></i>
+                        </button>
+                    </div>
+                </div>
 
-    if (url.pathname === "/api/unsubscribe" && request.method === "POST") {
-      return handleUnsubscribe(request, env);
-    }
+                <!-- USDT TRC20 -->
+                <div class="wallet-card reveal">
+                    <div class="wallet-header">
+                        <i data-lucide="dollar-sign" class="wallet-icon"></i>
+                        <span class="network-tag">USDT (TRC20)</span>
+                    </div>
+                    <div class="qr-box">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=THDgB7P7VejeNhDBVzwbD7k2fLYxou4r5a" alt="TRC20 QR">
+                    </div>
+                    <div class="address-container">
+                        <code class="wallet-address" id="trc-addr">THDgB7P7VejeNhDBVzwbD7k2fLYxou4r5a</code>
+                        <button class="copy-btn" onclick="copyAddress('trc-addr')">
+                            <i data-lucide="copy"></i>
+                        </button>
+                    </div>
+                </div>
 
-    return new Response("Not found", { status: 404 });
-  },
+                <!-- USDT BEP20 -->
+                <div class="wallet-card reveal">
+                    <div class="wallet-header">
+                        <i data-lucide="shield-check" class="wallet-icon"></i>
+                        <span class="network-tag">USDT (BEP20)</span>
+                    </div>
+                    <div class="qr-box">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=0xf939d53855ac65220707003AEEEF35741F6CD177" alt="BEP20 QR">
+                    </div>
+                    <div class="address-container">
+                        <code class="wallet-address" id="bep-addr">0xf939d53855ac65220707003AEEEF35741F6CD177</code>
+                        <button class="copy-btn" onclick="copyAddress('bep-addr')">
+                            <i data-lucide="copy"></i>
+                        </button>
+                    </div>
+                </div>
 
-  async scheduled(event, env, ctx) {
-    ctx.waitUntil(handleScheduled(env));
-  },
+                <!-- USDT ERC20 -->
+                <div class="wallet-card reveal">
+                    <div class="wallet-header">
+                        <i data-lucide="layers" class="wallet-icon"></i>
+                        <span class="network-tag">USDT (ERC20)</span>
+                    </div>
+                    <div class="qr-box">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=0xf939d53855ac65220707003AEEEF35741F6CD177" alt="ERC20 QR">
+                    </div>
+                    <div class="address-container">
+                        <code class="wallet-address" id="erc-addr">0xf939d53855ac65220707003AEEEF35741F6CD177</code>
+                        <button class="copy-btn" onclick="copyAddress('erc-addr')">
+                            <i data-lucide="copy"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="action-footer reveal">
+                <button class="btn-glow" onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSc5mqLDK37pfhTiyRblpoKcSND_MuKxV-UxJVbbawXvLMvCjg/viewform', '_blank')">I've Paid</button>
+            </div>
+
+            <div class="notify-row reveal">
+                <button
+                    id="notify-toggle"
+                    role="switch"
+                    aria-checked="false"
+                    aria-label="Get notified of nothing"
+                ></button>
+                <span class="notify-label">notify me of nothing</span>
+            </div>
+            <p class="notify-note reveal">Does paying change whether you get notifications? No. The toggle is the same for everyone — whether you've paid or not.</p>
+        </div>
+    </section>
+
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-logo">NOTHING</div>
+            <p>&copy; 2026 NOTHING. An Ongoing Social Experiment.</p>
+            <div class="social-links">
+                <a href="https://x.com/NOTINGLAB" target="_blank" aria-label="Twitter" title="Twitter"><i class="fa-brands fa-x-twitter" style="color:#ffffff;"></i></a>
+                <a href="https://github.com/falcongold83-dotcom/nothing" target="_blank" aria-label="Github" title="Github"><i class="fa-brands fa-github" style="color:#ffffff;"></i></a>
+                <a href="https://instagram.com/nothinglab1" target="_blank" aria-label="Instagram" title="Instagram"><i class="fa-brands fa-instagram" style="color:#E1306C;"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast">Address copied to clipboard</div>
+
+    <div id="cursor"></div>
+    <script>
+
+const first100List = document.getElementById("first100-list");
+
+const claimedMembers = {
+
 };
+
+for (let i = 1; i <= 100; i++) {
+
+    let number = String(i).padStart(3, "0");
+
+    if (claimedMembers[i]) {
+
+        const linkHtml = claimedMembers[i].link
+            ? `<a href="${claimedMembers[i].link}" target="_blank" class="tx-link" onclick="event.stopPropagation()"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>`
+            : '';
+
+        first100List.innerHTML += `
+        <div class="member claimed" data-tooltip="${claimedMembers[i].crypto}">
+            <span>#${number}</span>
+            <div>
+                <strong>${claimedMembers[i].name}</strong>
+                ${linkHtml}
+            </div>
+        </div>
+        `;
+
+    } else {
+
+      first100List.innerHTML += `
+        <div class="member available" onclick="openFirst100Modal('${number}')">
+            <span>#${number}</span>
+        </div>
+        `;
+
+    }
+
+}
+
+const claimedCountNum = Object.keys(claimedMembers).length;
+document.getElementById("claimedCount").textContent = claimedCountNum + " / 100 CLAIMED";
+const namesClaimedStatEl = document.getElementById("namesClaimedStat");
+namesClaimedStatEl.setAttribute("data-target", claimedCountNum);
+namesClaimedStatEl.textContent = String(claimedCountNum).padStart(3, "0");
+
+        function openFirst100Modal(number) {
+            document.getElementById("selectedPosition").textContent = "#" + number;
+            document.getElementById("first100Modal").classList.add("active");
+        }
+
+        function closeFirst100Modal() {
+            document.getElementById("first100Modal").classList.remove("active");
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById("first100Modal").addEventListener("click", function(e) {
+                if (e.target === this) closeFirst100Modal();
+            });
+
+            document.querySelector(".continue-first100").addEventListener("click", function() {
+                const selectedIdentity = document.querySelector('input[name="identity"]:checked').value;
+                const nameInput = document.getElementById("displayNameInput");
+                const errorMsg = document.getElementById("first100Error");
+
+                if (selectedIdentity === "display" && nameInput.value.trim() === "") {
+                    nameInput.classList.add("input-error");
+                    errorMsg.classList.add("show");
+                    nameInput.focus();
+                    return;
+                }
+
+                nameInput.classList.remove("input-error");
+                errorMsg.classList.remove("show");
+                closeFirst100Modal();
+                document.getElementById("wallets").scrollIntoView({ behavior: "smooth" });
+                const walletGrid = document.querySelector(".wallet-grid");
+                walletGrid.classList.add("wallet-highlight");
+                setTimeout(() => walletGrid.classList.remove("wallet-highlight"), 3000);
+            });
+
+            document.querySelectorAll('input[name="identity"]').forEach(function(radio) {
+                radio.addEventListener("change", function() {
+                    document.getElementById("displayNameInput").classList.remove("input-error");
+                    document.getElementById("first100Error").classList.remove("show");
+                });
+            });
+
+            document.getElementById("displayNameInput").addEventListener("input", function() {
+                this.classList.remove("input-error");
+                document.getElementById("first100Error").classList.remove("show");
+            });
+        });
+        </script>
+        <!-- FIRST 100 MODAL -->
+
+<div id="first100Modal" class="first100-modal">
+
+    <div class="first100-modal-box">
+
+        <button class="close-first100" onclick="closeFirst100Modal()">
+            ×
+        </button>
+
+        <h2>THE FIRST 100</h2>
+
+        <p>
+            Position 
+            <strong id="selectedPosition">#001</strong>
+        </p>
+
+
+        <h3>How would you like to appear?</h3>
+
+
+        <label>
+            <input type="radio" name="identity" value="anonymous" checked>
+            Anonymous
+        </label>
+
+
+        <label>
+            <input type="radio" name="identity" value="display">
+            Display name
+        </label>
+
+
+        <input 
+        id="displayNameInput"
+        type="text"
+        placeholder="Your display name">
+
+        <div class="first100-error" id="first100Error">Please enter a display name, or choose Anonymous.</div>
+
+        <button class="continue-first100">
+            Continue
+        </button>
+
+    </div>
+
+</div>
+
+  <!-- Cookie Consent Banner -->
+  <div class="cookie-banner" id="cookieBanner">
+    <div class="cookie-banner-text">
+      <p>This site uses cookies for basic analytics (page views) to understand how many people find NOTHING. No personal data is sold or shared. <a href="#" id="cookieLearnMore">Learn more</a></p>
+    </div>
+    <div class="cookie-banner-actions">
+      <button class="cookie-btn cookie-decline" id="cookieDecline">Decline</button>
+      <button class="cookie-btn cookie-accept" id="cookieAccept">Accept</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script type="module">
+    import { initNotifyToggle } from "/subscribe-widget.js";
+    initNotifyToggle("#notify-toggle");
+  </script>
+  <script>
+    (function () {
+      var CONSENT_KEY = 'nothing_cookie_consent';
+      var banner = document.getElementById('cookieBanner');
+      var accept = document.getElementById('cookieAccept');
+      var decline = document.getElementById('cookieDecline');
+      var learnMore = document.getElementById('cookieLearnMore');
+
+      function hideBanner() {
+        banner.classList.remove('visible');
+      }
+
+      var saved = localStorage.getItem(CONSENT_KEY);
+      if (saved === 'granted') {
+        window.loadGoogleAnalytics();
+      } else if (saved !== 'denied') {
+        // No choice made yet — show the banner
+        setTimeout(function () { banner.classList.add('visible'); }, 600);
+      }
+
+      accept.addEventListener('click', function () {
+        localStorage.setItem(CONSENT_KEY, 'granted');
+        window.loadGoogleAnalytics();
+        hideBanner();
+      });
+
+      decline.addEventListener('click', function () {
+        localStorage.setItem(CONSENT_KEY, 'denied');
+        hideBanner();
+      });
+
+      learnMore.addEventListener('click', function (e) {
+        e.preventDefault();
+        alert('We use Google Analytics to count anonymous page views only — no ads, no personal profiling, no data sold to third parties. You can change your choice anytime by clearing your browser data for this site.');
+      });
+    })();
+  </script>
+  </body>
+    </html>
