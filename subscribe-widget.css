@@ -23,6 +23,11 @@
   font-size: 0.85rem;
   letter-spacing: 0.02em;
   color: var(--notify-fg-dim);
+  transition: color 0.2s ease;
+}
+
+#notify-toggle.is-on + .notify-label {
+  color: var(--notify-fg-bright);
 }
 
 .notify-note {
