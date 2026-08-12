@@ -46,16 +46,22 @@ function startCounters() {
 
         let count = 0;
         const speed = target / 100 || 1;
+        const hasPercent = stat.innerText.includes('%');
+        const hasDollar = stat.innerText.includes('$');
+
+        const formatValue = (val) => {
+            if (hasDollar) return `$${val.toLocaleString()}`;
+            if (hasPercent) return `${val.toLocaleString()}%`;
+            return val.toLocaleString();
+        };
 
         const updateCount = () => {
             if (count < target) {
                 count += Math.ceil(speed);
-                stat.innerText = stat.innerText.includes('$') ?
-                    `$${count.toLocaleString()}` : count.toLocaleString();
+                stat.innerText = formatValue(Math.min(count, target));
                 setTimeout(updateCount, 20);
             } else {
-                stat.innerText = stat.innerText.includes('$') ?
-                    `$${target.toLocaleString()}` : target.toLocaleString();
+                stat.innerText = formatValue(target);
             }
         };
         updateCount();
@@ -165,19 +171,3 @@ function updateDayCounter() {
 }
 
 updateDayCounter();
-
-/**
- * FAQ ACCORDION
- */
-function toggleFaq(buttonEl) {
-    const item = buttonEl.closest(".faq-item");
-    const wasActive = item.classList.contains("active");
-
-    document.querySelectorAll(".faq-item.active").forEach((openItem) => {
-        openItem.classList.remove("active");
-    });
-
-    if (!wasActive) {
-        item.classList.add("active");
-    }
-}
