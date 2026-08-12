@@ -6,6 +6,8 @@
 :root {
   --notify-fg: #e8e8e8;
   --notify-fg-dim: #7a7a7a;
+  --notify-fg-bright: #f5f5f5;
+  --notify-border-on: #ffffff;
   --notify-bg: transparent;
   --notify-border: #3a3a3a;
 }
@@ -54,12 +56,12 @@
 }
 
 #notify-toggle.is-on {
-  border-color: var(--notify-fg);
+  border-color: var(--notify-border-on);
 }
 
 #notify-toggle.is-on::after {
   transform: translateX(1.2rem);
-  background: var(--notify-fg);
+  background: var(--notify-fg-bright);
 }
 
 #notify-toggle[disabled] {
