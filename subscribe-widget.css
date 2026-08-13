@@ -16,9 +16,8 @@
 .notify-row {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.5rem;
   font-family: inherit;
-  margin-top: 1.75rem;
 }
 
 .notify-state {
@@ -85,4 +84,14 @@
 #notify-toggle:focus-visible {
   outline: 1px solid var(--notify-fg);
   outline-offset: 2px;
+}
+
+/* In the fixed navbar there isn't room for the full label on small
+   screens (nav-links are hidden below 768px for the same reason) —
+   keep just the off/switch/on so it stays tappable without crowding
+   the logo. */
+@media (max-width: 768px) {
+  .notify-label {
+    display: none;
+  }
 }
