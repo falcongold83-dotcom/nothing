@@ -8,7 +8,7 @@
   --notify-fg-dim: #7a7a7a;
   --notify-fg-bright: #f5f5f5;
   --notify-fg-faint: #555555;
-  --notify-border-on: #ffffff;
+  --notify-gold: #d4af37;
   --notify-bg: transparent;
   --notify-border: #3a3a3a;
 }
@@ -43,6 +43,10 @@
   color: var(--notify-fg-dim);
 }
 
+.notify-note-gold {
+  color: var(--notify-gold);
+}
+
 #notify-toggle {
   position: relative;
   width: 2.6rem;
@@ -68,12 +72,12 @@
 }
 
 #notify-toggle.is-on {
-  border-color: var(--notify-border-on);
+  border-color: var(--notify-gold);
 }
 
 #notify-toggle.is-on::after {
   transform: translateX(1.2rem);
-  background: var(--notify-fg-bright);
+  background: var(--notify-gold);
 }
 
 #notify-toggle[disabled] {
