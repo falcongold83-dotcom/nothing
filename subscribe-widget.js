@@ -83,6 +83,8 @@ export async function initNotifyToggle(toggleSelector = "#notify-toggle") {
   if (!supported) {
     toggle.setAttribute("disabled", "true");
     toggle.title = "Push notifications aren't supported in this browser.";
+    const note = document.getElementById("notify-unsupported-note");
+    if (note) note.hidden = false;
     return;
   }
 
