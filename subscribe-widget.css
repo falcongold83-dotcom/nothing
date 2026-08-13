@@ -94,4 +94,19 @@
   .notify-label {
     display: none;
   }
+
+  /* The faint/dim tones read fine on a desktop display but wash out
+     on mobile screens — bump the off-state up a tier so the toggle
+     and its off/on labels stay legible. */
+  .notify-state {
+    color: var(--notify-fg-dim);
+  }
+
+  #notify-toggle {
+    border-color: var(--notify-fg-dim);
+  }
+
+  #notify-toggle::after {
+    background: var(--notify-fg);
+  }
 }

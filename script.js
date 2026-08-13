@@ -111,46 +111,51 @@ function showToast() {
 // Initial check for elements in view
 revealOnScroll();
 
-const cursor = document.getElementById("cursor");
-console.log("Cursor found:", cursor);
+// Custom cursor is a mouse-only affordance. On touch devices, skip
+// wiring it up entirely — no mousemove listener, no rAF loop, no
+// hover listeners — so there's nothing that could ever interfere with
+// a tap on a button or the notify toggle.
+if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    const cursor = document.getElementById("cursor");
 
-let mouseX = 0;
-let mouseY = 0;
-let cursorX = 0;
-let cursorY = 0;
+    let mouseX = 0;
+    let mouseY = 0;
+    let cursorX = 0;
+    let cursorY = 0;
 
-document.addEventListener("mousemove", (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-});
+    document.addEventListener("mousemove", (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+    });
 
-function animateCursor() {
-cursorX = mouseX;
-cursorY = mouseY;
+    function animateCursor() {
+        cursorX = mouseX;
+        cursorY = mouseY;
 
-    cursor.style.left = cursorX + "px";
-    cursor.style.top = cursorY + "px";
+        cursor.style.left = cursorX + "px";
+        cursor.style.top = cursorY + "px";
 
-    requestAnimationFrame(animateCursor);
+        requestAnimationFrame(animateCursor);
+    }
+
+    animateCursor();
+
+    document.querySelectorAll("a, button, .wallet-card").forEach((el) => {
+
+        el.addEventListener("mouseenter", () => {
+            cursor.style.width = "36px";
+            cursor.style.height = "36px";
+            cursor.style.background = "rgba(255,255,255,.08)";
+        });
+
+        el.addEventListener("mouseleave", () => {
+            cursor.style.width = "18px";
+            cursor.style.height = "18px";
+            cursor.style.background = "rgba(255,255,255,.15)";
+        });
+
+    });
 }
-
-animateCursor();
-
-document.querySelectorAll("a, button, .wallet-card").forEach((el) => {
-
-    el.addEventListener("mouseenter", () => {
-        cursor.style.width = "36px";
-        cursor.style.height = "36px";
-        cursor.style.background = "rgba(255,255,255,.08)";
-    });
-
-    el.addEventListener("mouseleave", () => {
-        cursor.style.width = "18px";
-        cursor.style.height = "18px";
-        cursor.style.background = "rgba(255,255,255,.15)";
-    });
-
-});
 // ===== Automatic Day Counter =====
 const projectStart = new Date("2026-07-26");
 

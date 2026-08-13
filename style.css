@@ -588,6 +588,7 @@ footer {
 }
 
 #cursor{
+    display:none;
     position:fixed;
     width:18px;
     height:18px;
@@ -606,8 +607,18 @@ footer {
         border-color .2s ease;
 }
 
-body{
-    cursor:none;
+/* Custom cursor is a hover/pointer-precision affordance — only show it
+   (and hide the native cursor) on devices that actually have a mouse.
+   On touch devices it stays display:none so it can never sit between
+   a finger and a button, on top of the pointer-events:none above. */
+@media (hover: hover) and (pointer: fine) {
+    #cursor{
+        display:block;
+    }
+
+    body{
+        cursor:none;
+    }
 }
 /* THE FIRST 100 */
 
