@@ -73,6 +73,13 @@ function setToggleState(toggle, isOn) {
   toggle.classList.toggle("is-on", isOn);
 }
 
+function showStatusNote(message) {
+  const note = document.getElementById("notify-status-note");
+  if (!note) return;
+  note.textContent = message;
+  note.hidden = false;
+}
+
 export async function initNotifyToggle(toggleSelector = "#notify-toggle") {
   const toggle = document.querySelector(toggleSelector);
   if (!toggle) return;
@@ -83,7 +90,7 @@ export async function initNotifyToggle(toggleSelector = "#notify-toggle") {
   if (!supported) {
     toggle.setAttribute("disabled", "true");
     toggle.title = "Push notifications aren't supported in this browser.";
-    const note = document.getElementById("notify-unsupported-note");
+    const note = document.getElementById("notify-status-note");
     if (note) note.hidden = false;
     return;
   }
@@ -92,17 +99,32 @@ export async function initNotifyToggle(toggleSelector = "#notify-toggle") {
   setToggleState(toggle, Boolean(existing));
 
   toggle.addEventListener("click", async () => {
-    const currentlyOn = toggle.classList.contains("is-on");
+    const goingOn = !toggle.classList.contains("is-on");
+
+    // Optimistic: flip the switch the instant it's tapped instead of
+    // waiting on the permission prompt and the round-trip to the
+    // worker — those can take a while (first-time permission dialog,
+    // slow mobile network) and the wait was exactly what made the
+    // toggle feel laggy on phones. Reconcile with reality below and
+    // revert if either step fails.
+    setToggleState(toggle, goingOn);
     toggle.setAttribute("disabled", "true");
 
     try {
-      if (currentlyOn) {
-        await unsubscribe();
-        setToggleState(toggle, false);
-      } else {
+      if (goingOn) {
         const sub = await subscribe();
-        setToggleState(toggle, Boolean(sub));
+        if (!sub) {
+          setToggleState(toggle, false);
+          showStatusNote(
+            "Notification permission was denied, so the toggle was turned back off. Allow notifications in your browser settings and try again."
+          );
+        }
+      } else {
+        await unsubscribe();
       }
+    } catch (err) {
+      setToggleState(toggle, !goingOn);
+      showStatusNote("Couldn't reach the notification server. Please try again.");
     } finally {
       toggle.removeAttribute("disabled");
     }
