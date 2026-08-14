@@ -99,28 +99,35 @@
     <!-- Live Stats -->
    
     <section class="stats-section" id="stats">
-        
+
         <div class="container">
             <div class="stats-grid">
                 <div class="stat-item reveal">
-                    <span class="stat-label">DAY</span>
-                   <h2 class="stat-value" id="dayCounter">001</h2>
+                    <span class="stat-label">MESSAGE RECIPIENTS</span>
+                   <h2 class="stat-value" id="subscribersStat" data-target="0">000</h2>
                 </div>
                 <div class="stat-item reveal">
-                   <span class="stat-label">THE FIRST 100</span>
-                   <h2 class="stat-value" data-target="100">100</h2>
-                </div>
-                <div class="stat-item reveal">
-                    <span class="stat-label">NAMES CLAIMED</span>
+                    <span class="stat-label">CONTRIBUTORS</span>
                     <h2 class="stat-value" id="namesClaimedStat" data-target="0">000</h2>
-                </div>
-                <div class="stat-item reveal">
-                   <span class="stat-label">NOTHING PROMISED</span>
-                   <h2 class="stat-value" data-target="100">100%</h2>
                 </div>
             </div>
         </div>
     </section>
+    <script>
+    (function () {
+        var PUBLIC_STATS_URL = "https://nothing-notifications.notinglab1.workers.dev/api/public-stats";
+        fetch(PUBLIC_STATS_URL)
+            .then(function (res) { return res.json(); })
+            .then(function (data) {
+                var el = document.getElementById("subscribersStat");
+                if (el && typeof data.subscribers === "number") {
+                    el.setAttribute("data-target", data.subscribers);
+                    el.textContent = String(data.subscribers).padStart(3, "0");
+                }
+            })
+            .catch(function () {});
+    })();
+    </script>
 
 
 <!-- The First 100 Section -->
