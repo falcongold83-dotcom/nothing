@@ -343,10 +343,10 @@ section {
     border: none;
     padding: 8px 20px;
     font-size: 0.8rem;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 4px;
     transition: var(--transition);
 }
 
