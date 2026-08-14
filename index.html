@@ -65,12 +65,60 @@
             <span class="notify-state">on</span>
             <span class="notify-label">notify me of nothing</span>
         </div>
-        <div class="nav-links">
+        <div class="nav-links" id="navLinks">
             <a href="#about">Experiment</a>
             <a href="#wallets">Contribute</a>
             <button class="btn-primary-sm" onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSc5mqLDK37pfhTiyRblpoKcSND_MuKxV-UxJVbbawXvLMvCjg/viewform', '_blank')">I've Paid</button>
         </div>
+        <button class="nav-hamburger" id="navHamburger" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
     </nav>
+
+    <script>
+    (function () {
+        var hamburger = document.getElementById('navHamburger');
+        var navLinks = document.getElementById('navLinks');
+        if (!hamburger || !navLinks) return;
+
+        function closeMenu() {
+            navLinks.classList.remove('mobile-open');
+            hamburger.classList.remove('is-open');
+            hamburger.setAttribute('aria-expanded', 'false');
+        }
+
+        function toggleMenu() {
+            var isOpen = navLinks.classList.toggle('mobile-open');
+            hamburger.classList.toggle('is-open', isOpen);
+            hamburger.setAttribute('aria-expanded', String(isOpen));
+        }
+
+        hamburger.addEventListener('click', function (e) {
+            e.stopPropagation();
+            toggleMenu();
+        });
+
+        navLinks.addEventListener('click', function (e) {
+            if (e.target.closest('a, button')) closeMenu();
+        });
+
+        document.addEventListener('click', function (e) {
+            if (!navLinks.classList.contains('mobile-open')) return;
+            if (navLinks.contains(e.target) || hamburger.contains(e.target)) return;
+            closeMenu();
+        });
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') closeMenu();
+        });
+
+        window.addEventListener('resize', function () {
+            if (window.innerWidth > 768) closeMenu();
+        });
+    })();
+    </script>
 
     <script>
     (function () {
