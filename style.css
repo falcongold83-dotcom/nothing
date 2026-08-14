@@ -616,6 +616,23 @@ footer {
 
 /* --- Responsive --- */
 @media (max-width: 768px) {
+    /* Nav-links collapses into the hamburger menu on mobile, so its
+       column only needs to fit the small hamburger button, not a full
+       row of links — freeing up space for the logo column instead of
+       both columns splitting it evenly. */
+    .navbar { grid-template-columns: 1fr auto auto; }
+
+    /* Truncating with an ellipsis would hide part of the brand text —
+       let it wrap to a second line instead on narrow screens rather
+       than cutting it off. The dynamic navbar-height script already
+       re-measures on resize, so a taller wrapped navbar is accounted
+       for automatically. */
+    .nav-logo {
+        white-space: normal;
+        overflow: visible;
+        text-overflow: clip;
+    }
+
     .nav-hamburger { display: flex; }
 
     .nav-links {
