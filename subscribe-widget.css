@@ -85,6 +85,35 @@
   cursor: default;
 }
 
+#notify-toggle::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0.7rem;
+  height: 0.7rem;
+  margin: -0.35rem 0 0 -0.35rem;
+  border-radius: 50%;
+  border: 1.5px solid transparent;
+  border-top-color: var(--notify-fg-bright);
+  opacity: 0;
+}
+
+#notify-toggle.is-loading::before {
+  opacity: 1;
+  animation: notify-spin 0.6s linear infinite;
+}
+
+#notify-toggle.is-loading::after {
+  opacity: 0.25;
+}
+
+@keyframes notify-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 #notify-toggle:focus-visible {
   outline: 1px solid var(--notify-fg);
   outline-offset: 2px;

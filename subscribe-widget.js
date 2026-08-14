@@ -109,6 +109,7 @@ export async function initNotifyToggle(toggleSelector = "#notify-toggle") {
     // revert if either step fails.
     setToggleState(toggle, goingOn);
     toggle.setAttribute("disabled", "true");
+    toggle.classList.add("is-loading");
 
     try {
       if (goingOn) {
@@ -127,6 +128,7 @@ export async function initNotifyToggle(toggleSelector = "#notify-toggle") {
       showStatusNote("Couldn't reach the notification server. Please try again.");
     } finally {
       toggle.removeAttribute("disabled");
+      toggle.classList.remove("is-loading");
     }
   });
 }
