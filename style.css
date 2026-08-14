@@ -69,9 +69,10 @@ section {
     top: 0;
     width: 100%;
     padding: 1.5rem 2rem;
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
+    gap: 1rem;
     z-index: 10000;
     backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--border-color);
@@ -81,12 +82,17 @@ section {
     font-weight: 800;
     letter-spacing: 4px;
     font-size: 1.2rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
 }
 
 .nav-links {
     display: flex;
     gap: 2rem;
     align-items: center;
+    justify-self: end;
 }
 
 .nav-links a {
@@ -576,6 +582,7 @@ footer {
 /* --- Responsive --- */
 @media (max-width: 768px) {
     .nav-links { display: none; }
+    .nav-logo { font-size: 0.85rem; letter-spacing: 1.5px; }
     .hero h1 { font-size: 5rem; }
     .subtitle { font-size: 1rem; letter-spacing: 0.2rem; }
     .wallet-grid { grid-template-columns: 1fr; }
@@ -587,6 +594,7 @@ footer {
 
 @media (max-width: 480px) {
     #first100-list { grid-template-columns: repeat(2, 1fr); }
+    .nav-logo { font-size: 0.65rem; letter-spacing: 1px; }
 }
 
 #cursor{
