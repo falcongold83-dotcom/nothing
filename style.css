@@ -8,6 +8,7 @@
     --text-secondary: #888888;
     --accent-glow: rgba(255, 255, 255, 0.15);
     --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    --navbar-height: 84px;
 }
 
 * {
@@ -103,7 +104,8 @@ section {
 
 /* --- Hero Section --- */
 .hero {
-    height: 100vh;
+    min-height: 100vh;
+    padding-top: var(--navbar-height);
     display: flex;
     align-items: center;
     justify-content: center;
