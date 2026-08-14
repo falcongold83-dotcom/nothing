@@ -72,6 +72,30 @@
         </div>
     </nav>
 
+    <script>
+    (function () {
+        // The navbar is position:fixed and reserves no layout space on its
+        // own, so .hero's padding-top has to match its real rendered height
+        // exactly — a hardcoded px value drifts if the navbar's content
+        // wraps or its font metrics shift. Measure it directly and re-measure
+        // on resize/font-load instead of guessing a static number.
+        function setNavbarHeight() {
+            var nav = document.querySelector('.navbar');
+            if (!nav) return;
+            var height = nav.getBoundingClientRect().height;
+            if (height > 0) {
+                document.documentElement.style.setProperty('--navbar-height', height + 'px');
+            }
+        }
+        setNavbarHeight();
+        window.addEventListener('resize', setNavbarHeight);
+        window.addEventListener('load', setNavbarHeight);
+        if (document.fonts && document.fonts.ready) {
+            document.fonts.ready.then(setNavbarHeight);
+        }
+    })();
+    </script>
+
     <!-- Hero Section -->
     <section class="hero" id="home">
         <div class="hero-content reveal">
