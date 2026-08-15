@@ -172,23 +172,24 @@ export async function initNotifyToggle(toggleSelector = "#notify-toggle") {
   setToggleState(toggle, Boolean(existing));
 
   toggle.addEventListener("click", async () => {
+    console.log("TOGGLE CLICKED");
     const goingOn = !toggle.classList.contains("is-on");
     toggle.setAttribute("disabled", "true");
 
-    if (goingOn) {
-      await showNotifyGuide();
-    }
-
-    // Optimistic: flip the switch the instant the guide closes instead of
-    // waiting on the permission prompt and the round-trip to the
-    // worker — those can take a while (first-time permission dialog,
-    // slow mobile network) and the wait was exactly what made the
-    // toggle feel laggy on phones. Reconcile with reality below and
-    // revert if either step fails.
-    setToggleState(toggle, goingOn);
-    toggle.classList.add("is-loading");
-
     try {
+      if (goingOn) {
+        await showNotifyGuide();
+      }
+
+      // Optimistic: flip the switch the instant the guide closes instead of
+      // waiting on the permission prompt and the round-trip to the
+      // worker — those can take a while (first-time permission dialog,
+      // slow mobile network) and the wait was exactly what made the
+      // toggle feel laggy on phones. Reconcile with reality below and
+      // revert if either step fails.
+      setToggleState(toggle, goingOn);
+      toggle.classList.add("is-loading");
+
       if (goingOn) {
         const sub = await subscribe();
         if (!sub) {
@@ -201,6 +202,7 @@ export async function initNotifyToggle(toggleSelector = "#notify-toggle") {
         await unsubscribe();
       }
     } catch (err) {
+      console.error("TOGGLE ERROR:", err.message, err.stack);
       setToggleState(toggle, !goingOn);
       showStatusNote("Couldn't reach the notification server. Please try again.");
     } finally {

@@ -1,3 +1,5 @@
+console.log('SCRIPT LOADED');
+
 // Initialize Lucide Icons
 lucide.createIcons();
 
