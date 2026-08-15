@@ -80,6 +80,79 @@ function showStatusNote(message) {
   note.hidden = false;
 }
 
+const NOTIFY_GUIDE_STEPS = [
+  "Turning this on? Your browser will ask for permission — allow it.",
+  "Also check your phone's settings: notifications must be enabled for this browser, or nothing will reach you.",
+];
+
+// Shown every time the toggle goes from off to on — not just the first
+// time — since the phone-settings reminder stays relevant on every visit.
+function showNotifyGuide() {
+  return new Promise((resolve) => {
+    const overlay = document.createElement("div");
+    overlay.className = "notify-guide-overlay";
+
+    const modal = document.createElement("div");
+    modal.className = "notify-guide-modal";
+    overlay.appendChild(modal);
+
+    let step = 0;
+
+    function close() {
+      overlay.remove();
+      resolve();
+    }
+
+    function render() {
+      modal.innerHTML = "";
+
+      const dots = document.createElement("div");
+      dots.className = "notify-guide-dots";
+      NOTIFY_GUIDE_STEPS.forEach((_, i) => {
+        const dot = document.createElement("span");
+        dot.className = "notify-guide-dot" + (i === step ? " is-on" : "");
+        dots.appendChild(dot);
+      });
+      modal.appendChild(dots);
+
+      const text = document.createElement("p");
+      text.className = "notify-guide-text";
+      text.textContent = NOTIFY_GUIDE_STEPS[step];
+      modal.appendChild(text);
+
+      const row = document.createElement("div");
+      row.className = "notify-guide-row";
+
+      const skipBtn = document.createElement("button");
+      skipBtn.type = "button";
+      skipBtn.className = "notify-guide-skip";
+      skipBtn.textContent = "Skip";
+      skipBtn.addEventListener("click", close);
+
+      const isLast = step === NOTIFY_GUIDE_STEPS.length - 1;
+      const nextBtn = document.createElement("button");
+      nextBtn.type = "button";
+      nextBtn.className = "notify-guide-next";
+      nextBtn.textContent = isLast ? "Allow" : "Next";
+      nextBtn.addEventListener("click", () => {
+        if (isLast) {
+          close();
+        } else {
+          step += 1;
+          render();
+        }
+      });
+
+      row.appendChild(skipBtn);
+      row.appendChild(nextBtn);
+      modal.appendChild(row);
+    }
+
+    render();
+    document.body.appendChild(overlay);
+  });
+}
+
 export async function initNotifyToggle(toggleSelector = "#notify-toggle") {
   const toggle = document.querySelector(toggleSelector);
   if (!toggle) return;
@@ -100,15 +173,19 @@ export async function initNotifyToggle(toggleSelector = "#notify-toggle") {
 
   toggle.addEventListener("click", async () => {
     const goingOn = !toggle.classList.contains("is-on");
+    toggle.setAttribute("disabled", "true");
 
-    // Optimistic: flip the switch the instant it's tapped instead of
+    if (goingOn) {
+      await showNotifyGuide();
+    }
+
+    // Optimistic: flip the switch the instant the guide closes instead of
     // waiting on the permission prompt and the round-trip to the
     // worker — those can take a while (first-time permission dialog,
     // slow mobile network) and the wait was exactly what made the
     // toggle feel laggy on phones. Reconcile with reality below and
     // revert if either step fails.
     setToggleState(toggle, goingOn);
-    toggle.setAttribute("disabled", "true");
     toggle.classList.add("is-loading");
 
     try {
