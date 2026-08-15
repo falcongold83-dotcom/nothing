@@ -239,10 +239,18 @@ section {
     opacity: 1;
 }
 
+/* .hero-question is shared by two different elements: the intro <p>
+   (kept left-aligned) and the <div> wrapping "How much would you pay"
+   (centered here, per request, to match the rest of the page) — the
+   tag distinguishes them so no HTML change is needed. */
+div.hero-question {
+    text-align: center;
+}
+
 .hero-description {
     max-width: 720px;
     margin: var(--space-4) auto 0;
-    text-align: left;
+    text-align: center;
 }
 
 .scroll-indicator {
