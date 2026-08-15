@@ -131,6 +131,10 @@
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.75);
+  /* Matches the blur already used on the site's other overlays
+     (.modal-overlay, .first100-modal) so this guide feels like part of
+     the same family instead of a one-off popup. */
+  backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -142,20 +146,23 @@
   width: 100%;
   max-width: 320px;
   background: #0a0a0a;
-  border: 1px solid var(--notify-border);
-  border-radius: 6px;
-  padding: 1.75rem 1.5rem 1.5rem;
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  border-radius: 14px;
+  padding: 2.25rem 2rem 2rem;
+  /* Deep drop shadow for separation from the page behind the overlay,
+     plus a faint gold ambient glow to tie it to the brand accent. */
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65), 0 0 40px rgba(212, 175, 55, 0.1);
 }
 
 .notify-guide-dots {
   display: flex;
-  gap: 6px;
-  margin-bottom: 1.25rem;
+  gap: 10px;
+  margin-bottom: 1.75rem;
 }
 
 .notify-guide-dot {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: var(--notify-fg-faint);
 }
@@ -175,7 +182,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 1.75rem;
+  margin-top: 2.25rem;
 }
 
 .notify-guide-skip {
@@ -186,34 +193,33 @@
   font-size: 12px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--notify-fg-dim);
+  color: var(--notify-fg);
   padding: 8px 4px;
   transition: color 0.2s ease;
 }
 
 .notify-guide-skip:hover {
-  color: var(--notify-fg);
+  color: var(--notify-fg-bright);
 }
 
 .notify-guide-next {
   font-family: inherit;
   cursor: pointer;
-  background:
-    linear-gradient(#0a0a0a, #0a0a0a) padding-box,
-    linear-gradient(135deg, #ffffff, var(--notify-gold)) border-box;
-  border: 1px solid transparent;
-  color: var(--notify-fg-bright);
+  background: var(--notify-gold);
+  border: 1px solid var(--notify-gold);
+  color: #000;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  padding: 7px 16px;
+  padding: 8px 18px;
   border-radius: 4px;
-  transition: filter 0.2s ease;
+  transition: filter 0.2s ease, transform 0.15s ease;
 }
 
 .notify-guide-next:hover {
-  filter: brightness(1.2);
+  filter: brightness(1.1);
+  transform: translateY(-1px);
 }
 
 /* In the fixed navbar there isn't room for the full label on small
