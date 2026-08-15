@@ -3,23 +3,24 @@
 <head>
     <!-- TEMPORARY — inline on-screen debug logger for diagnosing the iPhone
          toggle issue without a Mac. No external CDN (jsdelivr was likely
-         blocked on the user's mobile network). Must load before any other
-         script so it can capture their console output. Remove after the
-         bug is found and fixed. -->
-    <div id="dbg" style="position:fixed;bottom:0;left:0;right:0;max-height:35vh;overflow:auto;background:rgba(0,0,0,.9);color:#0f0;font:10px monospace;padding:6px;z-index:999999;white-space:pre-wrap"></div>
+         blocked on the user's mobile network). A <div> can't legally live
+         in <head> (it broke head parsing entirely, which is why the iOS
+         meta tags below stopped working) — so this only buffers log
+         entries here; the visible panel is rendered from the buffer at
+         the top of <body>. Remove after the bug is found and fixed. -->
     <script>
+    window.__debugLog = [];
     (function () {
-      var el = document.getElementById('dbg');
-      function log(m, color) { var d = document.createElement('div'); if (color) d.style.color = color; d.textContent = m; el.appendChild(d); el.scrollTop = el.scrollHeight; }
+      function push(msg, color) { window.__debugLog.push({ msg: msg, color: color }); }
       var oLog = console.log, oErr = console.error;
-      console.log = function () { oLog.apply(console, arguments); log('LOG: ' + [].slice.call(arguments).join(' ')); };
-      console.error = function () { oErr.apply(console, arguments); log('ERROR: ' + [].slice.call(arguments).join(' '), '#f55'); };
-      window.onerror = function (msg, src, line) { log('WINDOW ERROR: ' + msg + ' @' + src + ':' + line, '#f55'); };
-      window.addEventListener('unhandledrejection', function (e) { log('REJECTION: ' + (e.reason && e.reason.message || e.reason), '#f55'); });
+      console.log = function () { oLog.apply(console, arguments); push('LOG: ' + [].slice.call(arguments).join(' ')); };
+      console.error = function () { oErr.apply(console, arguments); push('ERROR: ' + [].slice.call(arguments).join(' '), '#f55'); };
+      window.onerror = function (msg, src, line) { push('WINDOW ERROR: ' + msg + ' @' + src + ':' + line, '#f55'); };
+      window.addEventListener('unhandledrejection', function (e) { push('REJECTION: ' + (e.reason && e.reason.message || e.reason), '#f55'); });
     })();
     </script>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <!-- Required for iOS: without these, an icon added to the Home Screen
          still opens as a regular Safari tab instead of standalone, so
          window.navigator.standalone never becomes true and push
@@ -69,6 +70,19 @@
     </script>
 </head>
 <body>
+
+    <!-- TEMPORARY — renders the log entries buffered in <head>. Remove
+         alongside the buffering script once the bug is found and fixed. -->
+    <div id="dbg" style="position:fixed;bottom:0;left:0;right:0;max-height:35vh;overflow:auto;background:rgba(0,0,0,.9);color:#0f0;font:10px monospace;padding:6px;z-index:999999;white-space:pre-wrap"></div>
+    <script>
+    (function () {
+      var el = document.getElementById('dbg');
+      function render(entry) { var d = document.createElement('div'); if (entry.color) d.style.color = entry.color; d.textContent = entry.msg; el.appendChild(d); el.scrollTop = el.scrollHeight; }
+      window.__debugLog.forEach(render);
+      var origPush = window.__debugLog.push.bind(window.__debugLog);
+      window.__debugLog.push = function (entry) { origPush(entry); render(entry); };
+    })();
+    </script>
 
     <!-- Progress Bar -->
     <div class="progress-container">

@@ -9,6 +9,7 @@
     --accent-glow: rgba(255, 255, 255, 0.15);
     --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     --navbar-height: 84px;
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 * {
@@ -1114,12 +1115,14 @@ footer {
     justify-content: space-between;
     gap: 16px;
     box-shadow: 0 10px 40px rgba(0,0,0,.5);
-    z-index: 9999;
+    /* TEMPORARY: above the debug logger's z-index (999999) too, while
+       that's still on the page — drop this back down once it's removed. */
+    z-index: 1000000;
     transition: bottom 0.5s ease;
 }
 
 .cookie-banner.visible {
-    bottom: 20px;
+    bottom: calc(20px + var(--safe-bottom));
 }
 
 .cookie-banner-text p {
@@ -1178,7 +1181,7 @@ footer {
         gap: 10px;
     }
     .cookie-banner.visible {
-        bottom: 12px;
+        bottom: calc(12px + var(--safe-bottom));
     }
     .cookie-banner-text p {
         font-size: 0.78rem;
