@@ -88,6 +88,12 @@ section {
     align-items: center;
     gap: 1rem;
     z-index: 10000;
+    /* backdrop-filter alone blurs scrolled content but doesn't hide it —
+       the notify-toggle's thumb rendered on top stays perfectly sharp,
+       so it can look like a stray dot floating over blurred page text
+       underneath. A real background stops that content from showing
+       through at all. */
+    background: rgba(0, 0, 0, 0.72);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--border-color);
 }
@@ -179,6 +185,16 @@ section {
     left: 50%;
     transform: translate(-50%, -50%);
     pointer-events: none;
+}
+
+.hero-content {
+    /* .hero-content has no width of its own — it shrink-wraps to its
+       widest child, which keeps every paragraph inside it capped at
+       that same width and centered together. That only works once the
+       viewport is wider than the paragraphs' own max-width; below that
+       there was no side gutter at all, so text ran edge-to-edge on
+       narrow screens. */
+    padding: 0 1.5rem;
 }
 
 .hero h1 {
