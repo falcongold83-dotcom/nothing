@@ -195,6 +195,17 @@ section {
        there was no side gutter at all, so text ran edge-to-edge on
        narrow screens. */
     padding: 0 1.5rem;
+    /* Flex items default to a min-width of their content's min-content
+       size, which for this item is set by "NOTHING" — a single
+       unbreakable word — at h1's font-size floor (clamp's 4rem
+       minimum). On very narrow phones that floor is wider than the
+       viewport, so the flex item refused to shrink and justify-content
+       centered an oversized box, pushing it slightly past the left
+       edge instead of gutter-padding it evenly. Letting it shrink past
+       that and rely on .hero's existing overflow:hidden to clip the
+       rare residual overflow keeps the box (and everything centered
+       inside it) properly centered instead.  */
+    min-width: 0;
 }
 
 .hero h1 {
@@ -758,7 +769,14 @@ footer {
     left:0;
     top:0;
     transform:translate(-50%,-50%);
-    z-index:99999;
+    /* Must outrank every overlay on the page, since body{cursor:none}
+       below hides the native pointer unconditionally — if this custom
+       cursor ever ends up under a modal, there is no cursor at all.
+       It was 99999, but .notify-guide-overlay (100000) and the cookie
+       banner (1000000) both sit above that and are full-page/fixed, so
+       either one silently swallowed the cursor while open. Set above
+       the highest z-index used anywhere else on the page. */
+    z-index:2000000;
     transition:
         width .2s ease,
         height .2s ease,
