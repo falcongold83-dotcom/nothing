@@ -11,23 +11,66 @@ const VAPID_PUBLIC_KEY = "BAyoFu6cDDNsOhVdTjmQl45eIvXucTZTZEsmZOEIY9uIlQcfYJcL4w
 
 const WORKER_URL = "https://nothing-notifications.notinglab1.workers.dev";
 
-// iOS standalone PWAs sometimes drop the network stack while backgrounded;
-// the first fetch after resuming can fail with "Load failed" even though
-// the network is fine a moment later. One retry after a short delay covers
-// that case without adding real latency to the common, first-try-succeeds path.
-async function fetchWithRetry(url, options) {
+const FETCH_TIMEOUT_MS = 5000;
+
+// AbortController-backed fetch so a request that never settles (seen after
+// this fix shipped — iOS leaving a connection half-open instead of failing
+// it outright) can't hang the toggle forever.
+async function fetchWithTimeout(url, options) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
   try {
-    return await fetch(url, options);
+    return await fetch(url, { ...options, signal: controller.signal });
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
+// iOS standalone PWAs sometimes drop the network stack while backgrounded;
+// the first fetch after resuming can fail (or hang) even though the network
+// is fine a moment later. One retry after a short delay covers that case
+// without adding real latency to the common, first-try-succeeds path.
+async function fetchWithRetry(url, options) {
+  console.log("FETCH START:", url);
+  try {
+    const res = await fetchWithTimeout(url, options);
+    console.log("FETCH SUCCESS:", url);
+    return res;
   } catch (err) {
-    console.error(
-      "FETCH FAILED, retrying:",
-      err.name,
-      err.message,
-      "| navigator.onLine:",
-      navigator.onLine
-    );
+    if (err.name === "AbortError") {
+      console.error("FETCH TIMEOUT:", url);
+    } else {
+      console.error(
+        "FETCH FAILED (retry 1):",
+        url,
+        err.name,
+        err.message,
+        "| navigator.onLine:",
+        navigator.onLine
+      );
+    }
     await new Promise((resolve) => setTimeout(resolve, 500));
-    return fetch(url, options);
+
+    console.log("FETCH START (retry):", url);
+    try {
+      const res = await fetchWithTimeout(url, options);
+      console.log("FETCH SUCCESS (retry):", url);
+      return res;
+    } catch (err2) {
+      if (err2.name === "AbortError") {
+        console.error("FETCH TIMEOUT (retry):", url);
+      } else {
+        console.error(
+          "FETCH FAILED (retry 2):",
+          url,
+          err2.name,
+          err2.message,
+          "| navigator.onLine:",
+          navigator.onLine
+        );
+      }
+      throw err2;
+    }
   }
 }
 
@@ -197,30 +240,28 @@ export async function initNotifyToggle(toggleSelector = "#notify-toggle") {
     const goingOn = !toggle.classList.contains("is-on");
     toggle.setAttribute("disabled", "true");
 
+    // Not optimistic: the toggle only flips once the server has actually
+    // confirmed the subscribe/unsubscribe. An earlier version flipped it
+    // immediately and reconciled afterward, but that meant a failed or
+    // hung request could leave the UI showing "on" when the server never
+    // received anything — the loading spinner is the feedback instead.
+    toggle.classList.add("is-loading");
+
     try {
       if (goingOn) {
         await showNotifyGuide();
-      }
 
-      // Optimistic: flip the switch the instant the guide closes instead of
-      // waiting on the permission prompt and the round-trip to the
-      // worker — those can take a while (first-time permission dialog,
-      // slow mobile network) and the wait was exactly what made the
-      // toggle feel laggy on phones. Reconcile with reality below and
-      // revert if either step fails.
-      setToggleState(toggle, goingOn);
-      toggle.classList.add("is-loading");
-
-      if (goingOn) {
         const sub = await subscribe();
         if (!sub) {
-          setToggleState(toggle, false);
           showStatusNote(
-            "Notification permission was denied, so the toggle was turned back off. Allow notifications in your browser settings and try again."
+            "Notification permission was denied. Allow notifications in your browser settings and try again."
           );
+        } else {
+          setToggleState(toggle, true);
         }
       } else {
         await unsubscribe();
+        setToggleState(toggle, false);
       }
     } catch (err) {
       console.error(
@@ -232,7 +273,6 @@ export async function initNotifyToggle(toggleSelector = "#notify-toggle") {
         "| stack:",
         err.stack
       );
-      setToggleState(toggle, !goingOn);
       showStatusNote("Couldn't reach the notification server. Please try again.");
     } finally {
       toggle.removeAttribute("disabled");
