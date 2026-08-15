@@ -10,6 +10,7 @@
     --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     --navbar-height: 84px;
     --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-top: env(safe-area-inset-top, 0px);
 }
 
 * {
@@ -625,8 +626,15 @@ footer {
     /* Nav-links collapses into the hamburger menu on mobile, so its
        column only needs to fit the small hamburger button, not a full
        row of links — freeing up space for the logo column instead of
-       both columns splitting it evenly. */
-    .navbar { grid-template-columns: 1fr auto auto; }
+       both columns splitting it evenly. On iOS, the status bar
+       (clock/signal/battery) also overlaps this fixed top:0 bar unless
+       pushed down by the safe-area inset; the dynamic navbar-height
+       script re-measures after this, so content below automatically
+       accounts for the taller bar. */
+    .navbar {
+        grid-template-columns: 1fr auto auto;
+        padding-top: calc(1.5rem + var(--safe-top));
+    }
 
     /* Truncating with an ellipsis would hide part of the brand text —
        let it wrap to a second line instead on narrow screens rather
