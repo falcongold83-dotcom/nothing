@@ -155,6 +155,7 @@ function showNotifyGuide() {
 
 export async function initNotifyToggle(toggleSelector = "#notify-toggle") {
   const toggle = document.querySelector(toggleSelector);
+  console.log("TOGGLE ELEMENT FOUND: " + (toggle ? "yes" : "NO - NULL"));
   if (!toggle) return;
 
   const supported =
@@ -210,4 +211,5 @@ export async function initNotifyToggle(toggleSelector = "#notify-toggle") {
       toggle.classList.remove("is-loading");
     }
   });
+  console.log("LISTENER ATTACHED");
 }

@@ -10,12 +10,12 @@
     <script>
     (function () {
       var el = document.getElementById('dbg');
-      function log(m) { var d = document.createElement('div'); d.textContent = m; el.appendChild(d); el.scrollTop = el.scrollHeight; }
+      function log(m, color) { var d = document.createElement('div'); if (color) d.style.color = color; d.textContent = m; el.appendChild(d); el.scrollTop = el.scrollHeight; }
       var oLog = console.log, oErr = console.error;
       console.log = function () { oLog.apply(console, arguments); log('LOG: ' + [].slice.call(arguments).join(' ')); };
-      console.error = function () { oErr.apply(console, arguments); log('ERROR: ' + [].slice.call(arguments).join(' ')); };
-      window.onerror = function (msg, src, line) { log('WINDOW ERROR: ' + msg + ' @' + src + ':' + line); };
-      window.addEventListener('unhandledrejection', function (e) { log('REJECTION: ' + (e.reason && e.reason.message || e.reason)); });
+      console.error = function () { oErr.apply(console, arguments); log('ERROR: ' + [].slice.call(arguments).join(' '), '#f55'); };
+      window.onerror = function (msg, src, line) { log('WINDOW ERROR: ' + msg + ' @' + src + ':' + line, '#f55'); };
+      window.addEventListener('unhandledrejection', function (e) { log('REJECTION: ' + (e.reason && e.reason.message || e.reason), '#f55'); });
     })();
     </script>
     <meta charset="UTF-8">
