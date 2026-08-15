@@ -9,7 +9,10 @@
 // (the worker README explains how to generate it).
 const VAPID_PUBLIC_KEY = "BAyoFu6cDDNsOhVdTjmQl45eIvXucTZTZEsmZOEIY9uIlQcfYJcL4wfzkzS7vAzq0dMLvCqNixallSZnaw2bcYc";
 
-const WORKER_URL = "https://nothing-notifications.notinglab1.workers.dev";
+// Same-site custom domain instead of the *.workers.dev origin — iOS Safari
+// in standalone (Home Screen) mode was hanging/timing out on fetches to a
+// third-party workers.dev domain.
+const WORKER_URL = "https://api.notinglab1.com";
 
 const FETCH_TIMEOUT_MS = 5000;
 
