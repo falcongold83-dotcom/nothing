@@ -385,13 +385,18 @@ section {
     background: #fff;
     color: #000;
     border: none;
-    padding: 8px 20px;
-    font-size: 0.8rem;
+    padding: 10px 28px;
+    font-size: 1rem;
     font-weight: 700;
     cursor: pointer;
     text-transform: uppercase;
     letter-spacing: 4px;
+    border-radius: 6px;
     transition: var(--transition);
+}
+
+.btn-primary-sm:hover {
+    background: #d9d9d9;
 }
 
 .btn-glow {
