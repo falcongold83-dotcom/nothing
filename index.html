@@ -20,6 +20,13 @@
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Required for iOS: without these, an icon added to the Home Screen
+         still opens as a regular Safari tab instead of standalone, so
+         window.navigator.standalone never becomes true and push
+         notifications can't be enabled. -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="NOTHING">
     <title>NOTHING | An Ongoing Social Experiment</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <meta name="description" content="How much would you pay knowing you will receive absolutely Nothing?">
