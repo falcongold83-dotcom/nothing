@@ -246,6 +246,11 @@ section {
     text-transform: uppercase;
     letter-spacing: 2px;
     margin-bottom: 0.5rem;
+    /* Reserves room for two lines even when the label only needs one, so
+       stat-value numbers line up across items regardless of how many of
+       their neighbors' labels happen to wrap (e.g. "MESSAGE RECIPIENTS"
+       vs "CONTRIBUTORS" on narrow screens). */
+    min-height: 3.2em;
 }
 .stat-item{
     padding: 1.5rem 0;
