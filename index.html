@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- TEMPORARY — mobile debug console for diagnosing the iPhone toggle
+         issue without a Mac. Must load before any other script so it can
+         capture their console output. Remove after the bug is found and fixed. -->
+    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+    <script>eruda.init();</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NOTHING | An Ongoing Social Experiment</title>
@@ -584,9 +589,5 @@ namesClaimedStatEl.textContent = String(claimedCountNum).padStart(3, "0");
       });
     })();
   </script>
-  <!-- TEMPORARY — mobile debug console for diagnosing the iPhone toggle
-       issue without a Mac. Remove after the bug is found and fixed. -->
-  <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
-  <script>eruda.init();</script>
   </body>
     </html>
