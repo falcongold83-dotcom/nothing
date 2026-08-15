@@ -27,12 +27,6 @@
   z-index: 1;
 }
 
-.notify-state {
-  font-size: 0.7rem;
-  letter-spacing: 0.02em;
-  color: var(--notify-fg-faint);
-}
-
 .notify-label {
   font-size: 0.85rem;
   letter-spacing: 0.02em;
@@ -46,12 +40,14 @@
 
 .notify-note {
   margin-top: 0.4rem;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   color: var(--notify-fg-dim);
 }
 
 .notify-note-gold {
   color: var(--notify-gold);
+  font-size: 1rem;
+  font-weight: 600;
 }
 
 #notify-toggle {
@@ -60,10 +56,10 @@
   height: 1.4rem;
   border: 1px solid var(--notify-border);
   border-radius: 999px;
-  background: var(--notify-bg);
+  background: rgba(255, 255, 255, 0.04);
   cursor: pointer;
   padding: 0;
-  transition: border-color 0.2s ease;
+  transition: border-color 0.2s ease, background 0.2s ease;
 }
 
 #notify-toggle::after {
@@ -78,8 +74,13 @@
   transition: transform 0.2s ease, background 0.2s ease;
 }
 
+/* With no off/on text left beside the switch, the track's own background
+   carries part of the state signal too — dark/neutral when off, a warm
+   gold tint when on — on top of the thumb's color+position and the
+   border color. */
 #notify-toggle.is-on {
   border-color: var(--notify-gold);
+  background: rgba(212, 175, 55, 0.18);
 }
 
 #notify-toggle.is-on::after {
@@ -217,18 +218,11 @@
 
 /* In the fixed navbar there isn't room for the full label on small
    screens (nav-links are hidden below 768px for the same reason) —
-   keep just the off/switch/on so it stays tappable without crowding
+   keep just the switch itself so it stays tappable without crowding
    the logo. */
 @media (max-width: 768px) {
   .notify-label {
     display: none;
-  }
-
-  /* The faint/dim tones read fine on a desktop display but wash out
-     on mobile screens — bump the off-state up a tier so the toggle
-     and its off/on labels stay legible. */
-  .notify-state {
-    color: var(--notify-fg-dim);
   }
 
   #notify-toggle {

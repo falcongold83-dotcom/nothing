@@ -5,12 +5,24 @@
     --card-hover: #111111;
     --border-color: #222222;
     --text-primary: #ffffff;
+    --text-primary-soft: #cfcfcf;
     --text-secondary: #888888;
     --accent-glow: rgba(255, 255, 255, 0.15);
     --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     --navbar-height: 84px;
     --safe-bottom: env(safe-area-inset-bottom, 0px);
     --safe-top: env(safe-area-inset-top, 0px);
+
+    /* Spacing scale (8px base unit) — used for vertical rhythm between
+       sections and content blocks so gaps read as consistent rather than
+       ad hoc. */
+    --space-1: 8px;
+    --space-2: 16px;
+    --space-3: 24px;
+    --space-4: 32px;
+    --space-5: 48px;
+    --space-6: 64px;
+    --space-7: 96px;
 }
 
 * {
@@ -45,7 +57,7 @@ body {
 }
 
 section {
-    padding: 100px 0;
+    padding: var(--space-7) 0;
 }
 
 /* --- Progress Bar --- */
@@ -173,7 +185,12 @@ section {
     font-size: clamp(4rem, 15vw, 10rem);
     font-weight: 800;
    letter-spacing: -0.08em;
-    margin-bottom: 1rem;
+    /* line-height was inheriting body's 1.6, which at this font-size added
+       ~150px of leading above and below the glyphs — the real source of
+       the oversized gap before "NOTHING". Tightened and replaced with an
+       explicit, scale-based margin instead. */
+    line-height: 1.05;
+    margin: var(--space-6) 0 var(--space-3);
 }
 
 .subtitle {
@@ -182,16 +199,23 @@ section {
     color: var(--text-secondary);
     letter-spacing: 0.5rem;
     text-transform: uppercase;
-    margin-bottom: 3rem;
+    margin-bottom: var(--space-5);
 }
 
 .hero-question {
     font-size: 1.2rem;
-    color: var(--text-primary);
-    max-width: 500px;
-    margin: 0 auto;
+    color: var(--text-primary-soft);
+    max-width: 720px;
+    margin: 0 auto var(--space-3);
+    text-align: left;
     font-weight: 300;
     opacity: 1;
+}
+
+.hero-description {
+    max-width: 720px;
+    margin: var(--space-4) auto 0;
+    text-align: left;
 }
 
 .scroll-indicator {
