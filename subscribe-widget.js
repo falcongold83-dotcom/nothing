@@ -11,6 +11,26 @@ const VAPID_PUBLIC_KEY = "BAyoFu6cDDNsOhVdTjmQl45eIvXucTZTZEsmZOEIY9uIlQcfYJcL4w
 
 const WORKER_URL = "https://nothing-notifications.notinglab1.workers.dev";
 
+// iOS standalone PWAs sometimes drop the network stack while backgrounded;
+// the first fetch after resuming can fail with "Load failed" even though
+// the network is fine a moment later. One retry after a short delay covers
+// that case without adding real latency to the common, first-try-succeeds path.
+async function fetchWithRetry(url, options) {
+  try {
+    return await fetch(url, options);
+  } catch (err) {
+    console.error(
+      "FETCH FAILED, retrying:",
+      err.name,
+      err.message,
+      "| navigator.onLine:",
+      navigator.onLine
+    );
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    return fetch(url, options);
+  }
+}
+
 function urlBase64ToUint8Array(base64String) {
   const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
   const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
@@ -42,7 +62,7 @@ async function subscribe() {
   });
 
   const json = subscription.toJSON();
-  await fetch(`${WORKER_URL}/api/subscribe`, {
+  await fetchWithRetry(`${WORKER_URL}/api/subscribe`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -61,7 +81,7 @@ async function unsubscribe() {
   const endpoint = subscription.endpoint;
   await subscription.unsubscribe();
 
-  await fetch(`${WORKER_URL}/api/unsubscribe`, {
+  await fetchWithRetry(`${WORKER_URL}/api/unsubscribe`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ endpoint }),
@@ -203,7 +223,15 @@ export async function initNotifyToggle(toggleSelector = "#notify-toggle") {
         await unsubscribe();
       }
     } catch (err) {
-      console.error("TOGGLE ERROR:", err.message, err.stack);
+      console.error(
+        "TOGGLE ERROR:",
+        err.name,
+        err.message,
+        "| navigator.onLine:",
+        navigator.onLine,
+        "| stack:",
+        err.stack
+      );
       setToggleState(toggle, !goingOn);
       showStatusNote("Couldn't reach the notification server. Please try again.");
     } finally {
