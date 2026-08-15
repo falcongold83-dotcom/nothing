@@ -23,6 +23,8 @@
   border: 1px solid var(--notify-border);
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.03);
+  position: relative;
+  z-index: 1;
 }
 
 .notify-state {

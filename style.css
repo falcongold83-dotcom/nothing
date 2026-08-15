@@ -649,10 +649,15 @@ footer {
         backdrop-filter: blur(10px);
         border-bottom: 1px solid var(--border-color);
         padding: 0.5rem 2rem 1.5rem;
+        /* Belt-and-suspenders: display:none already removes this from hit
+           testing entirely, but pointer-events:none guarantees it can never
+           intercept clicks even if display gets overridden unexpectedly. */
+        pointer-events: none;
     }
 
     .nav-links.mobile-open {
         display: flex;
+        pointer-events: auto;
     }
 
     .nav-links a {
