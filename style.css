@@ -808,7 +808,11 @@ footer {
 /* THE FIRST 100 */
 
 .first100-section {
-    padding: 100px 0;
+    /* Was a hardcoded 100px, left over from before the spacing scale
+       existed — its own selector is more specific than the generic
+       `section { padding: var(--space-7) 0; }` rule, so it never picked
+       up that change and sat 4px off from every other section. */
+    padding: var(--space-7) 0;
     text-align: center;
 }
 
