@@ -16,6 +16,31 @@ const WORKER_URL = "https://api.notinglab1.com";
 
 const FETCH_TIMEOUT_MS = 5000;
 
+// Stable per-browser id, generated once and kept in localStorage. The
+// worker used to key subscriptions by hash(endpoint), but push endpoints
+// can rotate (FCM token refresh, browser-driven pushsubscriptionchange)
+// between subscribing and unsubscribing — when that happened, unsubscribe
+// hashed a different endpoint than the one the record was stored under, so
+// the delete silently matched nothing and the "off" toggle kept getting
+// pushes. Sending this id lets the server find the same record regardless
+// of what the endpoint currently is.
+const CLIENT_ID_STORAGE_KEY = "nothing-client-id";
+
+function generateClientId() {
+  if (crypto.randomUUID) return crypto.randomUUID();
+  const bytes = crypto.getRandomValues(new Uint8Array(16));
+  return [...bytes].map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+function getClientId() {
+  let id = localStorage.getItem(CLIENT_ID_STORAGE_KEY);
+  if (!id) {
+    id = generateClientId();
+    localStorage.setItem(CLIENT_ID_STORAGE_KEY, id);
+  }
+  return id;
+}
+
 // AbortController-backed fetch so a request that never settles (seen after
 // this fix shipped — iOS leaving a connection half-open instead of failing
 // it outright) can't hang the toggle forever.
@@ -114,6 +139,7 @@ async function subscribe() {
     body: JSON.stringify({
       endpoint: json.endpoint,
       keys: json.keys,
+      clientId: getClientId(),
     }),
   });
 
@@ -124,13 +150,15 @@ async function unsubscribe() {
   const subscription = await getExistingSubscription();
   if (!subscription) return;
 
+  // Read fresh off the live subscription (not a cached value) right before
+  // use, since this is the last point at which it's guaranteed current.
   const endpoint = subscription.endpoint;
   await subscription.unsubscribe();
 
   await fetchWithRetry(`${WORKER_URL}/api/unsubscribe`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ endpoint }),
+    body: JSON.stringify({ endpoint, clientId: getClientId() }),
   });
 }
 
