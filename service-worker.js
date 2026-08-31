@@ -11,13 +11,17 @@ self.addEventListener("activate", (event) => {
 });
 
 self.addEventListener("push", (event) => {
-  let data = {
+  const defaultData = {
     title: "NOTHING",
     body: "Nothing happened.",
     actions: [{ action: "view", title: "Observe" }],
   };
+  let data = defaultData;
   try {
-    if (event.data) data = event.data.json();
+    if (event.data) {
+      const incoming = event.data.json();
+      data = Object.assign({}, defaultData, incoming);
+    }
   } catch (e) {
     // If parsing fails, fall back to the default above. Even the failure
     // case here is, appropriately, nothing.
