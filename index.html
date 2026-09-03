@@ -161,6 +161,7 @@
             <p class="notify-note" id="notify-status-note" hidden>Push notifications aren't available in this browser. On iPhone, add this page to your Home Screen (Share → Add to Home Screen) to enable them.</p>
             <h1 class="glitch-text">NOTHING</h1>
             <p class="subtitle">Nothing. Exactly that.</p>
+            <p class="explainer reveal">A social experiment: pay any amount, in crypto, and receive nothing in return. That's the whole thing. <a href="#wallets" class="explainer-link">See how it works ↓</a></p>
             <p class="hero-question reveal" style="text-align: center;">You did not choose to be watched. You arrived, and the watching began — quietly, without asking. Whether you notice it or not changes nothing about whether it is happening.</p>
             <div class="hero-question">
                 <p>How much would you pay knowing you will receive absolutely Nothing?</p>
@@ -191,8 +192,8 @@
                    <h2 class="stat-value" id="subscribersStat" data-target="0">000</h2>
                 </div>
                 <div class="stat-item reveal">
-                    <span class="stat-label">CONTRIBUTORS</span>
-                    <h2 class="stat-value" id="namesClaimedStat" data-target="0">000</h2>
+                    <span class="stat-label">SPOTS OPEN</span>
+                    <h2 class="stat-value" id="namesClaimedStat" data-target="100">100</h2>
                 </div>
             </div>
         </div>
@@ -442,9 +443,13 @@ for (let i = 1; i <= 100; i++) {
 
 const claimedCountNum = Object.keys(claimedMembers).length;
 document.getElementById("claimedCount").textContent = claimedCountNum + " / 100 CLAIMED";
+// The top stats tile shows spots OPEN (100 - claimed), not spots claimed —
+// "000 CONTRIBUTORS" at launch reads as a dead project; "100 SPOTS OPEN"
+// reads as an invitation. Stays accurate automatically as claimedMembers fills in.
+const spotsOpenNum = 100 - claimedCountNum;
 const namesClaimedStatEl = document.getElementById("namesClaimedStat");
-namesClaimedStatEl.setAttribute("data-target", claimedCountNum);
-namesClaimedStatEl.textContent = String(claimedCountNum).padStart(3, "0");
+namesClaimedStatEl.setAttribute("data-target", spotsOpenNum);
+namesClaimedStatEl.textContent = String(spotsOpenNum).padStart(3, "0");
 
         function openFirst100Modal(number) {
             document.getElementById("selectedPosition").textContent = "#" + number;
