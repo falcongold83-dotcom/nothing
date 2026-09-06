@@ -491,11 +491,39 @@ namesClaimedStatEl.textContent = String(spotsOpenNum).padStart(3, "0");
             }
         }
 
-        function generateCertificate() {
+        const CERT_API_URL = "https://api.notinglab1.com/api/contribute";
+
+        async function generateCertificate() {
             const raw = document.getElementById("certAlias").value.trim();
             const alias = raw || "Anonymous";
-            const certNumber = String(claimedCountNum + 1).padStart(3, "0");
-            const dateStr = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+
+            const genBtn = document.querySelector('.cert-form .btn-glow');
+            const originalBtnText = genBtn ? genBtn.textContent : null;
+            if (genBtn) { genBtn.textContent = "Generating…"; genBtn.disabled = true; }
+
+            // Ask the backend for the next sequential certificate number so it
+            // stays consistent across every visitor (not just this browser).
+            // This only records that a certificate was self-issued with this
+            // alias — it is not a payment record and makes no verification claim.
+            let certNumber, dateStr;
+            try {
+                const resp = await fetch(CERT_API_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ alias, crypto: "self-issued" })
+                });
+                if (!resp.ok) throw new Error("bad response");
+                const data = await resp.json();
+                certNumber = data.id;
+                dateStr = new Date(data.dateISO).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+            } catch (err) {
+                // Backend unreachable — fall back to a local placeholder number
+                // rather than blocking the visitor from getting their certificate.
+                certNumber = String(claimedCountNum + 1).padStart(3, "0");
+                dateStr = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+            }
+
+            if (genBtn) { genBtn.textContent = originalBtnText; genBtn.disabled = false; }
 
             const canvas = document.getElementById("certCanvas");
             const ctx = canvas.getContext("2d");
