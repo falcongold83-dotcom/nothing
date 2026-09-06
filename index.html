@@ -271,113 +271,139 @@ Not a countdown. Not a competition. Spots are recorded in the order payment is r
         <div class="container">
             <h2 class="section-title reveal">Select Your Asset</h2>
 
-            <div class="action-footer reveal">
-                <a class="btn-glow" href="https://docs.google.com/forms/d/e/1FAIpQLSc5mqLDK37pfhTiyRblpoKcSND_MuKxV-UxJVbbawXvLMvCjg/viewform" target="_blank" rel="noopener noreferrer" style="text-decoration: none; display: inline-block;">I've Paid</a>
+            <div class="action-footer reveal" id="walletGate">
+                <button type="button" class="btn-glow" id="showWalletsBtn" onclick="revealWallets()">Show Payment Addresses</button>
             </div>
-            <p class="first100-text reveal" style="text-align: center; margin-top: 1rem;">No minimum. No maximum. If you want a starting point: <strong>$1</strong> is plenty — you're paying for nothing, there's no reason to overpay for it.</p>
-            <p class="first100-text reveal" style="text-align: center;">Pick an address below. Once you've paid, let us know.</p>
+            <p class="first100-text reveal" style="text-align: center; margin-top: 1rem;" id="walletGateHint">Addresses are hidden by default. Click above only when you're actually ready to pay.</p>
 
-            <div class="wallet-grid">
-                <!-- Bitcoin -->
-                <div class="wallet-card reveal">
-                    <div class="wallet-header">
-                        <i data-lucide="bitcoin" class="wallet-icon"></i>
-                        <span class="network-tag">Bitcoin Network</span>
+            <div id="walletsContent" style="display: none;">
+                <div class="action-footer reveal">
+                    <a class="btn-glow" href="https://docs.google.com/forms/d/e/1FAIpQLSc5mqLDK37pfhTiyRblpoKcSND_MuKxV-UxJVbbawXvLMvCjg/viewform" target="_blank" rel="noopener noreferrer" style="text-decoration: none; display: inline-block;">I've Paid</a>
+                </div>
+                <p class="first100-text reveal" style="text-align: center; margin-top: 1rem;">No minimum. No maximum. If you want a starting point: <strong>$1</strong> is plenty — you're paying for nothing, there's no reason to overpay for it.</p>
+                <p class="first100-text reveal" style="text-align: center;">Pick an address below. Once you've paid, let us know.</p>
+
+                <div class="wallet-grid">
+                    <!-- Bitcoin -->
+                    <div class="wallet-card reveal">
+                        <div class="wallet-header">
+                            <i data-lucide="bitcoin" class="wallet-icon"></i>
+                            <span class="network-tag">Bitcoin Network</span>
+                        </div>
+                        <div class="qr-box">
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=3DiZjb7VBmWhiJRTtu472BNNaw5ikieJej" alt="BTC QR">
+                        </div>
+                        <div class="address-container">
+                            <code class="wallet-address" id="btc-addr">3DiZjb7VBmWhiJRTtu472BNNaw5ikieJej</code>
+                            <button class="copy-btn" onclick="copyAddress('btc-addr')">
+                                <i data-lucide="copy"></i>
+                            </button>
+                        </div>
                     </div>
-                    <div class="qr-box">
-                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=3DiZjb7VBmWhiJRTtu472BNNaw5ikieJej" alt="BTC QR">
+
+                    <!-- Ethereum -->
+                    <div class="wallet-card reveal">
+                        <div class="wallet-header">
+                            <i data-lucide="coins" class="wallet-icon"></i>
+                            <span class="network-tag">ERC-20</span>
+                        </div>
+                        <div class="qr-box">
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=0xf939d53855ac65220707003AEEEF35741F6CD177" alt="ETH QR">
+                        </div>
+                        <div class="address-container">
+                            <code class="wallet-address" id="eth-addr">0xf939d53855ac65220707003AEEEF35741F6CD177</code>
+                            <button class="copy-btn" onclick="copyAddress('eth-addr')">
+                                <i data-lucide="copy"></i>
+                            </button>
+                        </div>
                     </div>
-                    <div class="address-container">
-                        <code class="wallet-address" id="btc-addr">3DiZjb7VBmWhiJRTtu472BNNaw5ikieJej</code>
-                        <button class="copy-btn" onclick="copyAddress('btc-addr')">
-                            <i data-lucide="copy"></i>
-                        </button>
+
+                    <!-- BNB -->
+                    <div class="wallet-card reveal">
+                        <div class="wallet-header">
+                            <i data-lucide="component" class="wallet-icon"></i>
+                            <span class="network-tag">BEP-20 (BSC)</span>
+                        </div>
+                        <div class="qr-box">
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=0xf939d53855ac65220707003AEEEF35741F6CD177" alt="BNB QR">
+                        </div>
+                        <div class="address-container">
+                            <code class="wallet-address" id="bnb-addr">0xf939d53855ac65220707003AEEEF35741F6CD177</code>
+                            <button class="copy-btn" onclick="copyAddress('bnb-addr')">
+                                <i data-lucide="copy"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- USDT TRC20 -->
+                    <div class="wallet-card reveal">
+                        <div class="wallet-header">
+                            <i data-lucide="dollar-sign" class="wallet-icon"></i>
+                            <span class="network-tag">USDT (TRC20)</span>
+                        </div>
+                        <div class="qr-box">
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=THDgB7P7VejeNhDBVzwbD7k2fLYxou4r5a" alt="TRC20 QR">
+                        </div>
+                        <div class="address-container">
+                            <code class="wallet-address" id="trc-addr">THDgB7P7VejeNhDBVzwbD7k2fLYxou4r5a</code>
+                            <button class="copy-btn" onclick="copyAddress('trc-addr')">
+                                <i data-lucide="copy"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- USDT BEP20 -->
+                    <div class="wallet-card reveal">
+                        <div class="wallet-header">
+                            <i data-lucide="shield-check" class="wallet-icon"></i>
+                            <span class="network-tag">USDT (BEP20)</span>
+                        </div>
+                        <div class="qr-box">
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=0xf939d53855ac65220707003AEEEF35741F6CD177" alt="BEP20 QR">
+                        </div>
+                        <div class="address-container">
+                            <code class="wallet-address" id="bep-addr">0xf939d53855ac65220707003AEEEF35741F6CD177</code>
+                            <button class="copy-btn" onclick="copyAddress('bep-addr')">
+                                <i data-lucide="copy"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- USDT ERC20 -->
+                    <div class="wallet-card reveal">
+                        <div class="wallet-header">
+                            <i data-lucide="layers" class="wallet-icon"></i>
+                            <span class="network-tag">USDT (ERC20)</span>
+                        </div>
+                        <div class="qr-box">
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=0xf939d53855ac65220707003AEEEF35741F6CD177" alt="ERC20 QR">
+                        </div>
+                        <div class="address-container">
+                            <code class="wallet-address" id="erc-addr">0xf939d53855ac65220707003AEEEF35741F6CD177</code>
+                            <button class="copy-btn" onclick="copyAddress('erc-addr')">
+                                <i data-lucide="copy"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </section>
 
-                <!-- Ethereum -->
-                <div class="wallet-card reveal">
-                    <div class="wallet-header">
-                        <i data-lucide="coins" class="wallet-icon"></i>
-                        <span class="network-tag">ERC-20</span>
-                    </div>
-                    <div class="qr-box">
-                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=0xf939d53855ac65220707003AEEEF35741F6CD177" alt="ETH QR">
-                    </div>
-                    <div class="address-container">
-                        <code class="wallet-address" id="eth-addr">0xf939d53855ac65220707003AEEEF35741F6CD177</code>
-                        <button class="copy-btn" onclick="copyAddress('eth-addr')">
-                            <i data-lucide="copy"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- BNB -->
-                <div class="wallet-card reveal">
-                    <div class="wallet-header">
-                        <i data-lucide="component" class="wallet-icon"></i>
-                        <span class="network-tag">BEP-20 (BSC)</span>
-                    </div>
-                    <div class="qr-box">
-                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=0xf939d53855ac65220707003AEEEF35741F6CD177" alt="BNB QR">
-                    </div>
-                    <div class="address-container">
-                        <code class="wallet-address" id="bnb-addr">0xf939d53855ac65220707003AEEEF35741F6CD177</code>
-                        <button class="copy-btn" onclick="copyAddress('bnb-addr')">
-                            <i data-lucide="copy"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- USDT TRC20 -->
-                <div class="wallet-card reveal">
-                    <div class="wallet-header">
-                        <i data-lucide="dollar-sign" class="wallet-icon"></i>
-                        <span class="network-tag">USDT (TRC20)</span>
-                    </div>
-                    <div class="qr-box">
-                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=THDgB7P7VejeNhDBVzwbD7k2fLYxou4r5a" alt="TRC20 QR">
-                    </div>
-                    <div class="address-container">
-                        <code class="wallet-address" id="trc-addr">THDgB7P7VejeNhDBVzwbD7k2fLYxou4r5a</code>
-                        <button class="copy-btn" onclick="copyAddress('trc-addr')">
-                            <i data-lucide="copy"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- USDT BEP20 -->
-                <div class="wallet-card reveal">
-                    <div class="wallet-header">
-                        <i data-lucide="shield-check" class="wallet-icon"></i>
-                        <span class="network-tag">USDT (BEP20)</span>
-                    </div>
-                    <div class="qr-box">
-                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=0xf939d53855ac65220707003AEEEF35741F6CD177" alt="BEP20 QR">
-                    </div>
-                    <div class="address-container">
-                        <code class="wallet-address" id="bep-addr">0xf939d53855ac65220707003AEEEF35741F6CD177</code>
-                        <button class="copy-btn" onclick="copyAddress('bep-addr')">
-                            <i data-lucide="copy"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- USDT ERC20 -->
-                <div class="wallet-card reveal">
-                    <div class="wallet-header">
-                        <i data-lucide="layers" class="wallet-icon"></i>
-                        <span class="network-tag">USDT (ERC20)</span>
-                    </div>
-                    <div class="qr-box">
-                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=0xf939d53855ac65220707003AEEEF35741F6CD177" alt="ERC20 QR">
-                    </div>
-                    <div class="address-container">
-                        <code class="wallet-address" id="erc-addr">0xf939d53855ac65220707003AEEEF35741F6CD177</code>
-                        <button class="copy-btn" onclick="copyAddress('erc-addr')">
-                            <i data-lucide="copy"></i>
-                        </button>
-                    </div>
+    <!-- Certificate of Nothing Section -->
+    <section class="certificate-section" id="certificate">
+        <div class="container">
+            <h2 class="section-title reveal">Get Your Certificate of Nothing</h2>
+            <p class="first100-text reveal" style="text-align: center;">A self-issued keepsake for having paid for absolutely nothing. Not verified, not tracked — just yours to keep or share.</p>
+            <div class="cert-form reveal">
+                <input type="text" id="certAlias" placeholder="Your name or alias (optional)" maxlength="40">
+                <button type="button" class="btn-glow" onclick="generateCertificate()">Generate Certificate</button>
+            </div>
+            <div id="certResult" style="display: none; text-align: center; margin-top: 2.5rem;">
+                <canvas id="certCanvas" width="1000" height="620" style="max-width: 100%; height: auto; border-radius: 8px;"></canvas>
+                <div class="cert-actions">
+                    <button type="button" class="btn-glow" id="certDownloadBtn">Download</button>
+                    <button type="button" class="btn-glow" id="certShareBtn">Share on X</button>
                 </div>
             </div>
         </div>
@@ -452,6 +478,100 @@ const namesClaimedStatEl = document.getElementById("namesClaimedStat");
 namesClaimedStatEl.setAttribute("data-target", spotsOpenNum);
 namesClaimedStatEl.textContent = String(spotsOpenNum).padStart(3, "0");
 
+        function revealWallets() {
+            const gate = document.getElementById("walletGate");
+            const hint = document.getElementById("walletGateHint");
+            const content = document.getElementById("walletsContent");
+            if (gate) gate.style.display = "none";
+            if (hint) hint.style.display = "none";
+            if (content) {
+                content.style.display = "block";
+                content.querySelectorAll(".reveal").forEach(el => el.classList.add("active"));
+                content.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+        }
+
+        function generateCertificate() {
+            const raw = document.getElementById("certAlias").value.trim();
+            const alias = raw || "Anonymous";
+            const certNumber = String(claimedCountNum + 1).padStart(3, "0");
+            const dateStr = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+
+            const canvas = document.getElementById("certCanvas");
+            const ctx = canvas.getContext("2d");
+            const W = canvas.width, H = canvas.height;
+
+            ctx.fillStyle = "#000000";
+            ctx.fillRect(0, 0, W, H);
+
+            ctx.strokeStyle = "#D4AF37";
+            ctx.lineWidth = 6;
+            ctx.strokeRect(20, 20, W - 40, H - 40);
+            ctx.lineWidth = 1;
+            ctx.strokeRect(36, 36, W - 72, H - 72);
+
+            ctx.textAlign = "center";
+
+            ctx.fillStyle = "#D4AF37";
+            ctx.font = "700 26px Inter, sans-serif";
+            ctx.fillText("N O T H I N G", W / 2, 100);
+
+            ctx.fillStyle = "#ffffff";
+            ctx.font = "700 46px Inter, sans-serif";
+            ctx.fillText("CERTIFICATE OF NOTHING", W / 2, 175);
+
+            ctx.fillStyle = "#cfcfcf";
+            ctx.font = "400 22px Inter, sans-serif";
+            ctx.fillText("This certifies that", W / 2, 255);
+
+            ctx.fillStyle = "#D4AF37";
+            ctx.font = "700 40px Inter, sans-serif";
+            ctx.fillText(alias, W / 2, 315);
+
+            ctx.fillStyle = "#cfcfcf";
+            ctx.font = "400 22px Inter, sans-serif";
+            ctx.fillText("has paid for absolutely nothing,", W / 2, 370);
+            ctx.fillText("and received exactly that.", W / 2, 400);
+
+            ctx.strokeStyle = "#333333";
+            ctx.beginPath();
+            ctx.moveTo(W / 2 - 150, 440);
+            ctx.lineTo(W / 2 + 150, 440);
+            ctx.stroke();
+
+            ctx.fillStyle = "#888888";
+            ctx.font = "400 18px monospace";
+            ctx.fillText("CERTIFICATE NO. " + certNumber + "   ·   " + dateStr, W / 2, 480);
+
+            ctx.fillStyle = "#555555";
+            ctx.font = "400 16px Inter, sans-serif";
+            ctx.fillText("notinglab1.com — An Ongoing Social Experiment", W / 2, 560);
+
+            document.getElementById("certResult").style.display = "block";
+            document.getElementById("certResult").scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const dlBtn = document.getElementById("certDownloadBtn");
+            const shareBtn = document.getElementById("certShareBtn");
+            if (dlBtn) {
+                dlBtn.addEventListener("click", function() {
+                    const canvas = document.getElementById("certCanvas");
+                    const link = document.createElement("a");
+                    link.download = "certificate-of-nothing.png";
+                    link.href = canvas.toDataURL("image/png");
+                    link.click();
+                });
+            }
+            if (shareBtn) {
+                shareBtn.addEventListener("click", function() {
+                    const text = encodeURIComponent("I just received my Certificate of Nothing. I paid for absolutely nothing, and I have proof.");
+                    const url = encodeURIComponent("https://notinglab1.com");
+                    window.open("https://twitter.com/intent/tweet?text=" + text + "&url=" + url, "_blank");
+                });
+            }
+        });
+
         function openFirst100Modal(number) {
             document.getElementById("selectedPosition").textContent = "#" + number;
             document.getElementById("first100Modal").classList.add("active");
@@ -481,10 +601,14 @@ namesClaimedStatEl.textContent = String(spotsOpenNum).padStart(3, "0");
                 nameInput.classList.remove("input-error");
                 errorMsg.classList.remove("show");
                 closeFirst100Modal();
-                document.getElementById("wallets").scrollIntoView({ behavior: "smooth" });
-                const walletGrid = document.querySelector(".wallet-grid");
-                walletGrid.classList.add("wallet-highlight");
-                setTimeout(() => walletGrid.classList.remove("wallet-highlight"), 3000);
+                revealWallets();
+                setTimeout(() => {
+                    const walletGrid = document.querySelector(".wallet-grid");
+                    if (walletGrid) {
+                        walletGrid.classList.add("wallet-highlight");
+                        setTimeout(() => walletGrid.classList.remove("wallet-highlight"), 3000);
+                    }
+                }, 50);
             });
 
             document.querySelectorAll('input[name="identity"]').forEach(function(radio) {
