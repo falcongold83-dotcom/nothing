@@ -468,12 +468,145 @@ function padContributionId(n) {
 }
 __name(padContributionId, "padContributionId");
 
+function json(body, status) {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { "Content-Type": "application/json", ...corsHeaders() }
+  });
+}
+__name(json, "json");
+
+// Fixed wallet addresses shown on the site. EVM chains (ETH/BNB/ERC20/BEP20)
+// all share the same address since it's one EVM-format address.
+var WALLET_ADDRESSES = {
+  BTC: "3DiZjb7VBmWhiJRTtu472BNNaw5ikieJej",
+  ETH: "0xf939d53855ac65220707003AEEEF35741F6CD177",
+  BNB: "0xf939d53855ac65220707003AEEEF35741F6CD177",
+  ERC20: "0xf939d53855ac65220707003AEEEF35741F6CD177",
+  BEP20: "0xf939d53855ac65220707003AEEEF35741F6CD177",
+  TRC20: "THDgB7P7VejeNhDBVzwbD7k2fLYxou4r5a"
+};
+// Raw 20-byte hex form of the TRC20 address above (no 0x41 Tron prefix),
+// precomputed with base58.b58decode_check(addr)[1:].hex() — needed because
+// Tron log topics encode addresses this way, not as base58.
+var TRC20_ADDRESS_HEX = "4f8563181700da98656320bc801a238204b08c8a";
+var ERC20_TRANSFER_TOPIC = "ddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef";
+var SUPPORTED_CRYPTOS = ["BTC", "ETH", "BNB", "ERC20", "BEP20", "TRC20"];
+
+// Verifies a transaction hash against the real chain. Returns:
+//   { attempted: false }                     — no API key configured for this chain yet, so we can't check (caller decides whether to allow through unverified)
+//   { attempted: true, ok: true }             — verified: really pays our address
+//   { attempted: true, ok: false, reason }    — checked and it does NOT hold up
+async function verifyTransaction(cryptoAsset, txHash, env) {
+  try {
+    if (cryptoAsset === "BTC") return await verifyBTC(txHash);
+    if (cryptoAsset === "ETH") return await verifyEVM(txHash, env.ETHERSCAN_API_KEY, 1, false);
+    if (cryptoAsset === "ERC20") return await verifyEVM(txHash, env.ETHERSCAN_API_KEY, 1, true);
+    if (cryptoAsset === "BNB") return await verifyEVM(txHash, env.ETHERSCAN_API_KEY, 56, false);
+    if (cryptoAsset === "BEP20") return await verifyEVM(txHash, env.ETHERSCAN_API_KEY, 56, true);
+    if (cryptoAsset === "TRC20") return await verifyTron(txHash, env.TRONGRID_API_KEY);
+    return { attempted: false };
+  } catch (err) {
+    return { attempted: true, ok: false, reason: "Verification service error — please try again shortly." };
+  }
+}
+__name(verifyTransaction, "verifyTransaction");
+
+async function verifyBTC(txHash) {
+  const resp = await fetch(`https://blockstream.info/api/tx/${encodeURIComponent(txHash)}`);
+  if (resp.status === 404) {
+    return { attempted: true, ok: false, reason: "That Bitcoin transaction hash was not found." };
+  }
+  if (!resp.ok) {
+    return { attempted: true, ok: false, reason: "Could not reach the Bitcoin verification service — please try again shortly." };
+  }
+  const tx = await resp.json();
+  const paysUs = (tx.vout || []).some((o) => o.scriptpubkey_address === WALLET_ADDRESSES.BTC);
+  if (!paysUs) {
+    return { attempted: true, ok: false, reason: "That transaction does not pay the site's Bitcoin address." };
+  }
+  if (!(tx.status && tx.status.confirmed)) {
+    return { attempted: true, ok: false, reason: "That transaction hasn't been confirmed on the Bitcoin network yet — try again once it has at least 1 confirmation." };
+  }
+  return { attempted: true, ok: true };
+}
+__name(verifyBTC, "verifyBTC");
+
+async function verifyEVM(txHash, apiKey, chainId, isToken) {
+  if (!apiKey) return { attempted: false };
+  const base = `https://api.etherscan.io/v2/api?chainid=${chainId}&apikey=${encodeURIComponent(apiKey)}`;
+  const resp = await fetch(`${base}&module=proxy&action=eth_getTransactionReceipt&txhash=${encodeURIComponent(txHash)}`);
+  if (!resp.ok) {
+    return { attempted: true, ok: false, reason: "Could not reach the blockchain verification service — please try again shortly." };
+  }
+  const data = await resp.json();
+  const receipt = data && data.result;
+  if (!receipt) {
+    return { attempted: true, ok: false, reason: "That transaction hash was not found." };
+  }
+  if (receipt.status !== "0x1") {
+    return { attempted: true, ok: false, reason: "That transaction failed on-chain." };
+  }
+  const ourAddr = (isToken
+    ? (chainId === 1 ? WALLET_ADDRESSES.ERC20 : WALLET_ADDRESSES.BEP20)
+    : (chainId === 1 ? WALLET_ADDRESSES.ETH : WALLET_ADDRESSES.BNB)
+  ).toLowerCase();
+
+  if (!isToken) {
+    if ((receipt.to || "").toLowerCase() !== ourAddr) {
+      return { attempted: true, ok: false, reason: "That transaction does not pay the site's wallet address." };
+    }
+    return { attempted: true, ok: true };
+  }
+
+  const logs = receipt.logs || [];
+  const paysUs = logs.some((log) => {
+    if (!log.topics || log.topics[0] !== `0x${ERC20_TRANSFER_TOPIC}` || log.topics.length < 3) return false;
+    const toAddr = "0x" + log.topics[2].slice(-40);
+    return toAddr.toLowerCase() === ourAddr;
+  });
+  if (!paysUs) {
+    return { attempted: true, ok: false, reason: "No transfer to the site's wallet address was found in that transaction." };
+  }
+  return { attempted: true, ok: true };
+}
+__name(verifyEVM, "verifyEVM");
+
+async function verifyTron(txHash, apiKey) {
+  if (!apiKey) return { attempted: false };
+  const resp = await fetch("https://api.trongrid.io/wallet/gettransactioninfobyid", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "TRON-PRO-API-KEY": apiKey },
+    body: JSON.stringify({ value: txHash })
+  });
+  if (!resp.ok) {
+    return { attempted: true, ok: false, reason: "Could not reach the Tron verification service — please try again shortly." };
+  }
+  const info = await resp.json();
+  if (!info || !info.id) {
+    return { attempted: true, ok: false, reason: "That transaction hash was not found on the Tron network." };
+  }
+  if (info.receipt && info.receipt.result && info.receipt.result !== "SUCCESS") {
+    return { attempted: true, ok: false, reason: "That transaction failed on-chain." };
+  }
+  const logs = info.log || [];
+  const paysUs = logs.some((log) => {
+    const topics = log.topics || [];
+    const sig = (topics[0] || "").replace(/^0x/, "").toLowerCase();
+    if (sig !== ERC20_TRANSFER_TOPIC || topics.length < 3) return false;
+    const toTopic = topics[2].replace(/^0x/, "").toLowerCase();
+    return toTopic.slice(-40) === TRC20_ADDRESS_HEX;
+  });
+  if (!paysUs) {
+    return { attempted: true, ok: false, reason: "No TRC20 transfer to the site's wallet address was found in that transaction." };
+  }
+  return { attempted: true, ok: true };
+}
+__name(verifyTron, "verifyTron");
+
 async function handleContribute(request, env) {
   if (!env.CONTRIBUTIONS) {
-    return new Response(JSON.stringify({ error: "not configured" }), {
-      status: 500,
-      headers: { "Content-Type": "application/json", ...corsHeaders() }
-    });
+    return json({ error: "not configured" }, 500);
   }
   let body;
   try {
@@ -482,15 +615,32 @@ async function handleContribute(request, env) {
     body = null;
   }
   if (!body) {
-    return new Response(JSON.stringify({ error: "invalid body" }), {
-      status: 400,
-      headers: { "Content-Type": "application/json", ...corsHeaders() }
-    });
+    return json({ error: "invalid body" }, 400);
   }
   const alias = (body.alias || "").toString().trim().slice(0, 40) || "Anonymous";
-  const cryptoAsset = (body.crypto || "").toString().trim().slice(0, 20);
+  const cryptoAsset = (body.crypto || "").toString().trim().toUpperCase().slice(0, 20);
   const amount = (body.amount || "").toString().trim().slice(0, 20);
   const txHash = (body.txHash || "").toString().trim().slice(0, 120);
+  const showAmount = !!body.showAmount;
+
+  if (!SUPPORTED_CRYPTOS.includes(cryptoAsset)) {
+    return json({ error: "Please choose a supported currency." }, 400);
+  }
+  if (!txHash) {
+    return json({ error: "Please enter your transaction hash so we can verify your contribution." }, 400);
+  }
+
+  const txKey = `usedtx:${cryptoAsset}:${txHash.toLowerCase()}`;
+  const alreadyUsed = await env.CONTRIBUTIONS.get(txKey);
+  if (alreadyUsed) {
+    return json({ error: "That transaction has already been used for a certificate." }, 400);
+  }
+
+  const verification = await verifyTransaction(cryptoAsset, txHash, env);
+  if (verification.attempted && !verification.ok) {
+    return json({ error: verification.reason || "Could not verify that transaction on-chain." }, 400);
+  }
+  const verified = verification.attempted === true && verification.ok === true;
 
   const currentRaw = await env.CONTRIBUTIONS.get("counter");
   const next = (currentRaw ? parseInt(currentRaw, 10) || 0 : 0) + 1;
@@ -498,15 +648,52 @@ async function handleContribute(request, env) {
 
   const id = padContributionId(next);
   const dateISO = (/* @__PURE__ */ new Date()).toISOString();
-  const record = { id, alias, crypto: cryptoAsset, amount, txHash, dateISO };
+  const record = { id, alias, crypto: cryptoAsset, amount, txHash, showAmount, verified, dateISO };
   await env.CONTRIBUTIONS.put(`contrib:${id}`, JSON.stringify(record));
+  await env.CONTRIBUTIONS.put(txKey, id);
 
-  return new Response(JSON.stringify({ ok: true, id, alias, dateISO }), {
-    status: 200,
-    headers: { "Content-Type": "application/json", ...corsHeaders() }
-  });
+  return json({ ok: true, id, alias, amount, showAmount, verified, dateISO }, 200);
 }
 __name(handleContribute, "handleContribute");
+
+// --- Observer Badge: free, requires an active notification subscription ---
+async function handleObserverBadge(request, env) {
+  if (!env.SUBSCRIPTIONS) {
+    return json({ error: "not configured" }, 500);
+  }
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    body = null;
+  }
+  const endpoint = body && body.endpoint;
+  if (!endpoint) {
+    return json({ error: "missing endpoint" }, 400);
+  }
+  const alias = (body.alias || "").toString().trim().slice(0, 40) || "Anonymous";
+  const id = await hashEndpoint(endpoint);
+
+  const subRaw = await env.SUBSCRIPTIONS.get(`sub:${id}`);
+  if (!subRaw) {
+    return json({ error: "No active notification subscription found — turn on notifications first." }, 403);
+  }
+
+  const existingRaw = await env.SUBSCRIPTIONS.get(`observer:${id}`);
+  if (existingRaw) {
+    return json({ ok: true, ...JSON.parse(existingRaw) }, 200);
+  }
+
+  const currentRaw = await env.SUBSCRIPTIONS.get("observerCounter");
+  const next = (currentRaw ? parseInt(currentRaw, 10) || 0 : 0) + 1;
+  await env.SUBSCRIPTIONS.put("observerCounter", String(next));
+
+  const record = { id: padContributionId(next), alias, dateISO: (/* @__PURE__ */ new Date()).toISOString() };
+  await env.SUBSCRIPTIONS.put(`observer:${id}`, JSON.stringify(record));
+
+  return json({ ok: true, ...record }, 200);
+}
+__name(handleObserverBadge, "handleObserverBadge");
 
 async function handleGetCertificate(request, env) {
   if (!env.CONTRIBUTIONS) {
@@ -621,6 +808,9 @@ var index_default = {
       }
       if (url.pathname.startsWith("/api/certificate/") && request.method === "GET") {
         return await handleGetCertificate(request, env);
+      }
+      if (url.pathname === "/api/observer-badge" && request.method === "POST") {
+        return await handleObserverBadge(request, env);
       }
       return new Response("Not found", { status: 404 });
     } catch (err) {
