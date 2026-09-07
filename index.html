@@ -390,13 +390,48 @@ Not a countdown. Not a competition. Spots are recorded in the order payment is r
         </div>
     </section>
 
+    <!-- Observer Badge Section (free — for anyone who enabled notifications) -->
+    <section class="certificate-section observer-section" id="observer">
+        <div class="container">
+            <h2 class="section-title reveal">Get Your Observer Badge</h2>
+            <p class="first100-text reveal" style="text-align: center;">Free, for anyone who turned on notifications. It's proof you're watching — not proof you paid. Want the real thing? <a href="#certificate" style="color:#D4AF37;">Get the Certificate of Nothing ↓</a></p>
+            <div class="cert-form reveal">
+                <input type="text" id="obsAlias" placeholder="Real name or alias — whatever you like (optional)" maxlength="40">
+                <button type="button" class="btn-glow" id="obsGenerateBtn" onclick="generateObserverBadge()">Generate Observer Badge</button>
+            </div>
+            <div id="obsResult" style="display: none; text-align: center; margin-top: 2.5rem;">
+                <canvas id="obsCanvas" width="1000" height="620" style="max-width: 100%; height: auto; border-radius: 8px;"></canvas>
+                <div class="cert-actions">
+                    <button type="button" class="btn-glow" id="obsDownloadBtn">Download</button>
+                    <button type="button" class="btn-glow" id="obsShareBtn">Share on X</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Certificate of Nothing Section -->
     <section class="certificate-section" id="certificate">
         <div class="container">
             <h2 class="section-title reveal">Get Your Certificate of Nothing</h2>
-            <p class="first100-text reveal" style="text-align: center;">A self-issued keepsake for having paid for absolutely nothing. Not verified, not tracked — just yours to keep or share.</p>
+            <p class="first100-text reveal" style="text-align: center;">For real, verified contributors. We check your transaction against the actual blockchain — this isn't just a self-reported claim.</p>
             <div class="cert-form reveal">
-                <input type="text" id="certAlias" placeholder="Your name or alias (optional)" maxlength="40">
+                <input type="text" id="certAlias" placeholder="Real name or alias — whatever you like (optional)" maxlength="40">
+                <select id="certCrypto">
+                    <option value="">Which currency did you send?</option>
+                    <option value="BTC">BTC</option>
+                    <option value="ETH">ETH</option>
+                    <option value="BNB">BNB</option>
+                    <option value="ERC20">USDT (ERC20)</option>
+                    <option value="BEP20">USDT (BEP20)</option>
+                    <option value="TRC20">USDT (TRC20)</option>
+                </select>
+                <input type="text" id="certAmount" placeholder="Amount (optional)" maxlength="20">
+                <input type="text" id="certTxHash" placeholder="Transaction hash (required — from your wallet/exchange)" maxlength="120">
+            </div>
+            <div class="cert-checkbox-row reveal">
+                <label><input type="checkbox" id="certShowAmount"> Show the amount on my certificate</label>
+            </div>
+            <div class="cert-form reveal" style="margin-top: 1.5rem;">
                 <button type="button" class="btn-glow" onclick="generateCertificate()">Generate Certificate</button>
             </div>
             <div id="certResult" style="display: none; text-align: center; margin-top: 2.5rem;">
@@ -492,35 +527,65 @@ namesClaimedStatEl.textContent = String(spotsOpenNum).padStart(3, "0");
         }
 
         const CERT_API_URL = "https://api.notinglab1.com/api/contribute";
+        const OBSERVER_API_URL = "https://api.notinglab1.com/api/observer-badge";
 
         async function generateCertificate() {
             const raw = document.getElementById("certAlias").value.trim();
             const alias = raw || "Anonymous";
+            const cryptoAsset = document.getElementById("certCrypto").value;
+            const amount = document.getElementById("certAmount").value.trim();
+            const txHash = document.getElementById("certTxHash").value.trim();
+            const showAmount = document.getElementById("certShowAmount").checked;
 
-            const genBtn = document.querySelector('.cert-form .btn-glow');
+            if (!cryptoAsset) {
+                alert("Please select which currency you sent.");
+                return;
+            }
+            if (!txHash) {
+                alert("Please enter your transaction hash so we can verify your contribution.");
+                return;
+            }
+
+            const genBtn = document.querySelector('#certificate .cert-form .btn-glow');
             const originalBtnText = genBtn ? genBtn.textContent : null;
-            if (genBtn) { genBtn.textContent = "Generating…"; genBtn.disabled = true; }
+            if (genBtn) { genBtn.textContent = "Verifying…"; genBtn.disabled = true; }
 
-            // Ask the backend for the next sequential certificate number so it
-            // stays consistent across every visitor (not just this browser).
-            // This only records that a certificate was self-issued with this
-            // alias — it is not a payment record and makes no verification claim.
-            let certNumber, dateStr;
+            // Ask the backend to verify this transaction on-chain and hand back
+            // the next sequential certificate number, so numbering stays
+            // consistent across every visitor (not just this browser) and is
+            // tied to a real, checked contribution rather than a self-report.
+            let certNumber, dateStr, verified, resultAmount, resultShowAmount;
             try {
                 const resp = await fetch(CERT_API_URL, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ alias, crypto: "self-issued" })
+                    body: JSON.stringify({ alias, crypto: cryptoAsset, amount, txHash, showAmount })
                 });
-                if (!resp.ok) throw new Error("bad response");
-                const data = await resp.json();
+                const data = await resp.json().catch(() => null);
+                if (!resp.ok || !data || !data.ok) {
+                    // The backend explicitly rejected this submission (bad hash,
+                    // already used, doesn't pay our address, etc.) — do NOT fall
+                    // back to a local number, since that would let anyone bypass
+                    // verification just by sending something invalid.
+                    const reason = (data && data.error) || "Could not verify this contribution. Please check the details and try again.";
+                    alert(reason);
+                    if (genBtn) { genBtn.textContent = originalBtnText; genBtn.disabled = false; }
+                    return;
+                }
                 certNumber = data.id;
                 dateStr = new Date(data.dateISO).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+                verified = !!data.verified;
+                resultAmount = data.amount || amount;
+                resultShowAmount = !!data.showAmount;
             } catch (err) {
-                // Backend unreachable — fall back to a local placeholder number
-                // rather than blocking the visitor from getting their certificate.
+                // Network/backend unreachable entirely — fall back so a real
+                // outage doesn't block a legitimate visitor. This is the ONLY
+                // case that falls back; an explicit rejection above never does.
                 certNumber = String(claimedCountNum + 1).padStart(3, "0");
                 dateStr = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+                verified = false;
+                resultAmount = amount;
+                resultShowAmount = showAmount;
             }
 
             if (genBtn) { genBtn.textContent = originalBtnText; genBtn.disabled = false; }
@@ -571,12 +636,128 @@ namesClaimedStatEl.textContent = String(spotsOpenNum).padStart(3, "0");
             ctx.font = "400 18px monospace";
             ctx.fillText("CERTIFICATE NO. " + certNumber + "   ·   " + dateStr, W / 2, 480);
 
+            let nextY = 505;
+            if (resultShowAmount && resultAmount) {
+                ctx.fillStyle = "#D4AF37";
+                ctx.font = "400 16px monospace";
+                ctx.fillText("AMOUNT: " + resultAmount + " " + cryptoAsset, W / 2, nextY);
+                nextY += 25;
+            }
+            if (verified) {
+                ctx.fillStyle = "#5fbf6a";
+                ctx.font = "400 14px monospace";
+                ctx.fillText("✓ VERIFIED ON-CHAIN", W / 2, nextY);
+                nextY += 25;
+            }
+
             ctx.fillStyle = "#555555";
             ctx.font = "400 16px Inter, sans-serif";
-            ctx.fillText("notinglab1.com — An Ongoing Social Experiment", W / 2, 560);
+            ctx.fillText("notinglab1.com — An Ongoing Social Experiment", W / 2, nextY + 20);
 
             document.getElementById("certResult").style.display = "block";
             document.getElementById("certResult").scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+
+        function drawObserverBadge(alias, observerNumber, dateStr) {
+            const canvas = document.getElementById("obsCanvas");
+            const ctx = canvas.getContext("2d");
+            const W = canvas.width, H = canvas.height;
+
+            ctx.fillStyle = "#000000";
+            ctx.fillRect(0, 0, W, H);
+
+            const silver = "#B8BEC7";
+            const silverDim = "#8A8F96";
+
+            ctx.strokeStyle = silver;
+            ctx.lineWidth = 5;
+            ctx.strokeRect(20, 20, W - 40, H - 40);
+            ctx.lineWidth = 1;
+            ctx.strokeRect(36, 36, W - 72, H - 72);
+
+            ctx.textAlign = "center";
+
+            ctx.fillStyle = silver;
+            ctx.font = "700 26px Inter, sans-serif";
+            ctx.fillText("N O T H I N G", W / 2, 100);
+
+            ctx.fillStyle = "#ffffff";
+            ctx.font = "700 44px Inter, sans-serif";
+            ctx.fillText("OBSERVER BADGE", W / 2, 175);
+
+            ctx.fillStyle = "#cfcfcf";
+            ctx.font = "400 22px Inter, sans-serif";
+            ctx.fillText("This certifies that", W / 2, 255);
+
+            ctx.fillStyle = silver;
+            ctx.font = "700 40px Inter, sans-serif";
+            ctx.fillText(alias, W / 2, 315);
+
+            ctx.fillStyle = "#cfcfcf";
+            ctx.font = "400 22px Inter, sans-serif";
+            ctx.fillText("is watching NOTHING unfold.", W / 2, 370);
+            ctx.fillText("No payment made. Not yet, anyway.", W / 2, 400);
+
+            ctx.strokeStyle = "#333333";
+            ctx.beginPath();
+            ctx.moveTo(W / 2 - 150, 440);
+            ctx.lineTo(W / 2 + 150, 440);
+            ctx.stroke();
+
+            ctx.fillStyle = silverDim;
+            ctx.font = "400 18px monospace";
+            ctx.fillText("OBSERVER NO. " + observerNumber + "   ·   " + dateStr, W / 2, 480);
+
+            ctx.fillStyle = "#D4AF37";
+            ctx.font = "400 15px Inter, sans-serif";
+            ctx.fillText("Want the real thing? Contribute for your Certificate of Nothing →", W / 2, 515);
+
+            ctx.fillStyle = "#555555";
+            ctx.font = "400 16px Inter, sans-serif";
+            ctx.fillText("notinglab1.com — An Ongoing Social Experiment", W / 2, 565);
+        }
+
+        async function generateObserverBadge() {
+            const btn = document.getElementById("obsGenerateBtn");
+            const originalText = btn ? btn.textContent : null;
+            if (btn) { btn.textContent = "Checking…"; btn.disabled = true; }
+
+            try {
+                if (!("serviceWorker" in navigator)) {
+                    alert("Your browser doesn't support notifications, so there's no subscription to verify.");
+                    return;
+                }
+                const registration = await navigator.serviceWorker.getRegistration();
+                const sub = registration ? await registration.pushManager.getSubscription() : null;
+                if (!sub) {
+                    alert('Turn on "notify me of nothing" first — the Observer Badge is for people who actually enabled notifications.');
+                    return;
+                }
+
+                const raw = document.getElementById("obsAlias").value.trim();
+                const alias = raw || "Anonymous";
+
+                const resp = await fetch(OBSERVER_API_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ endpoint: sub.endpoint, alias })
+                });
+                const data = await resp.json().catch(() => null);
+                if (!resp.ok || !data || !data.ok) {
+                    alert((data && data.error) || "Could not verify your subscription. Please try again.");
+                    return;
+                }
+
+                const dateStr = new Date(data.dateISO).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+                drawObserverBadge(data.alias || alias, data.id, dateStr);
+
+                document.getElementById("obsResult").style.display = "block";
+                document.getElementById("obsResult").scrollIntoView({ behavior: "smooth", block: "center" });
+            } catch (err) {
+                alert("Something went wrong — please try again.");
+            } finally {
+                if (btn) { btn.textContent = originalText; btn.disabled = false; }
+            }
         }
 
         document.addEventListener("DOMContentLoaded", function() {
@@ -594,6 +775,25 @@ namesClaimedStatEl.textContent = String(spotsOpenNum).padStart(3, "0");
             if (shareBtn) {
                 shareBtn.addEventListener("click", function() {
                     const text = encodeURIComponent("I just received my Certificate of Nothing. I paid for absolutely nothing, and I have proof.");
+                    const url = encodeURIComponent("https://notinglab1.com");
+                    window.open("https://twitter.com/intent/tweet?text=" + text + "&url=" + url, "_blank");
+                });
+            }
+
+            const obsDlBtn = document.getElementById("obsDownloadBtn");
+            const obsShareBtn = document.getElementById("obsShareBtn");
+            if (obsDlBtn) {
+                obsDlBtn.addEventListener("click", function() {
+                    const canvas = document.getElementById("obsCanvas");
+                    const link = document.createElement("a");
+                    link.download = "observer-badge.png";
+                    link.href = canvas.toDataURL("image/png");
+                    link.click();
+                });
+            }
+            if (obsShareBtn) {
+                obsShareBtn.addEventListener("click", function() {
+                    const text = encodeURIComponent("I got my Observer Badge from NOTHING. I'm watching. I haven't paid for it — yet.");
                     const url = encodeURIComponent("https://notinglab1.com");
                     window.open("https://twitter.com/intent/tweet?text=" + text + "&url=" + url, "_blank");
                 });

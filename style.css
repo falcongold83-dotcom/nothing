@@ -496,6 +496,48 @@ div.hero-question {
     border-color: #D4AF37;
 }
 
+.cert-form select {
+    background: #0a0a0a;
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 12px 16px;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 1rem;
+    min-width: 220px;
+}
+
+.cert-form select:focus {
+    outline: none;
+    border-color: #D4AF37;
+}
+
+.cert-checkbox-row {
+    display: flex;
+    justify-content: center;
+    margin-top: 1.25rem;
+}
+
+.cert-checkbox-row label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-secondary, #999);
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+
+.cert-checkbox-row input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: #D4AF37;
+}
+
+.observer-section .cert-form select,
+.observer-section .cert-checkbox-row input[type="checkbox"] {
+    accent-color: #B8BEC7;
+}
+
 .cert-actions {
     display: flex;
     justify-content: center;
